@@ -12,7 +12,18 @@ export default class ShortURL {
   private CHARACTERS =
     "qwertyuiopasdfghjklzxcvbnmQWERTYUIOPASDFGHJKLZXCVBNM0123456789-_~";
 
-  constructor() {}
+  constructor() {
+    const test = this.generate();
+  }
+
+  getLength() {
+    return this.SHORTURL_LENGTH;
+  }
+
+  setLength(length: typeof this.SHORTURL_LENGTH) {
+    this.SHORTURL_LENGTH = length;
+    return this.SHORTURL_LENGTH;
+  }
 
   /**
    * Creates the short url.
@@ -20,13 +31,27 @@ export default class ShortURL {
    */
   private generate(length: typeof this.SHORTURL_LENGTH = this.SHORTURL_LENGTH) {
     let url = "";
+    let lastCharacter = "";
 
     for (let i = 0; i < length; i++) {
-      let randomCharacter = Math.floor(Math.random() * this.CHARACTERS.length);
+      let randomCharacter = this.pickRandomCharacter();
 
-      url += this.CHARACTERS[randomCharacter];
+      // Ensure current character is not the same as the last one
+      while (randomCharacter === lastCharacter) {
+        randomCharacter = this.pickRandomCharacter();
+      }
+
+      lastCharacter = randomCharacter;
+      url += randomCharacter;
     }
 
     return url;
+  }
+
+  private pickRandomCharacter(characters: string = this.CHARACTERS) {
+    let randomCharacterIndex = Math.floor(Math.random() * characters.length);
+    let randomCharacter = characters[randomCharacterIndex];
+
+    return randomCharacter!;
   }
 }
