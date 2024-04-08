@@ -1,4 +1,5 @@
 import express from "express";
+import ShortURL from "./api/short-url/ShortURL";
 
 const app = express();
 
