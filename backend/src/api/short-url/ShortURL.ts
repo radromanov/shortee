@@ -12,8 +12,24 @@ export default class ShortURL {
   private CHARACTERS =
     "qwertyuiopasdfghjklzxcvbnmQWERTYUIOPASDFGHJKLZXCVBNM0123456789-_~";
 
-  constructor() {
-    const test = this.generate();
+  private id: string;
+  private name: string;
+  private original: string;
+  private short: string;
+  private createdAt: Date;
+  private updatedAt: Date;
+
+  constructor(originalUrl: string, name: string) {
+    this.id = this.generate();
+    this.name = name;
+    this.original = originalUrl;
+    this.short = `${
+      process.env.NODE_ENV === "development"
+        ? `http://localhost:${process.env.PORT}`
+        : "https://shortee.com"
+    }/${this.generate()}`;
+    this.createdAt = new Date();
+    this.updatedAt = new Date();
   }
 
   getLength() {
@@ -23,6 +39,57 @@ export default class ShortURL {
   setLength(length: typeof this.SHORTURL_LENGTH) {
     this.SHORTURL_LENGTH = length;
     return this.SHORTURL_LENGTH;
+  }
+
+  get() {
+    return {
+      id: this.id,
+      name: this.name,
+      original: this.original,
+      short: this.short,
+      createdAt: this.createdAt,
+      updatedAt: this.updatedAt,
+    };
+  }
+
+  getID() {
+    return this.id;
+  }
+  getName() {
+    return this.name;
+  }
+  getOriginal() {
+    return this.original;
+  }
+  getShort() {
+    return this.short;
+  }
+  getCreatedAt() {
+    return this.createdAt;
+  }
+  getUpdatedAt() {
+    return this.updatedAt;
+  }
+
+  setName(newName: string) {
+    this.name = newName;
+    this.updatedAt = new Date();
+
+    /**
+     *  @todo DB call
+     */
+
+    return this.get();
+  }
+  setOriginal(newOriginal: string) {
+    this.original = newOriginal;
+    this.updatedAt = new Date();
+
+    /**
+     *  @todo DB call
+     */
+
+    return this.get();
   }
 
   /**
