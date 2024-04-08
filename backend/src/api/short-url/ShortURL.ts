@@ -1,6 +1,9 @@
 import z from "zod";
+import Config from "../../core/Config";
 
 export const ShortURLSchema = z.object({
+  id: z.string().min(1),
+  name: z.string().min(1),
   original: z.string().url(),
   short: z.string().url(),
   createdAt: z.date(),
@@ -20,13 +23,16 @@ export default class ShortURL {
   private updatedAt: Date;
 
   constructor(originalUrl: string, name: string) {
+    const envConfig = new Config();
+    const { PORT, NODE_ENV, DOMAIN } = envConfig.get();
+
     this.id = this.generate();
     this.name = name;
     this.original = originalUrl;
     this.short = `${
-      process.env.NODE_ENV === "development"
-        ? `http://localhost:${process.env.PORT}`
-        : "https://shortee.com"
+      NODE_ENV === "development"
+        ? `http://localhost:${PORT}`
+        : `https://${DOMAIN}`
     }/${this.generate()}`;
     this.createdAt = new Date();
     this.updatedAt = new Date();
@@ -42,16 +48,15 @@ export default class ShortURL {
   }
 
   get() {
-    return {
+    return ShortURLSchema.parse({
       id: this.id,
       name: this.name,
       original: this.original,
       short: this.short,
       createdAt: this.createdAt,
       updatedAt: this.updatedAt,
-    };
+    });
   }
-
   getID() {
     return this.id;
   }
