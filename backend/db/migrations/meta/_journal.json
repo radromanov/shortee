@@ -1,0 +1,20 @@
+{
+  "version": "5",
+  "dialect": "pg",
+  "entries": [
+    {
+      "idx": 0,
+      "version": "5",
+      "when": 1712819335624,
+      "tag": "0000_lucky_doctor_doom",
+      "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "5",
+      "when": 1712819420486,
+      "tag": "0001_easy_meggan",
+      "breakpoints": true
+    }
+  ]
+}

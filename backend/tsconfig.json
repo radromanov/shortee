@@ -19,5 +19,7 @@
     "esModuleInterop": true,
     "skipLibCheck": true,
     "moduleResolution": "node16"
-  }
+  },
+  "include": ["src", "db", "drizzle.config.ts"],
+  "exclude": ["node_modules", "dist"]
 }

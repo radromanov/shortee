@@ -1,13 +1,13 @@
 import z from "zod";
 import Config from "../../core/Config";
+import { db, urls } from "../../../db/schema/urls";
+import { eq } from "drizzle-orm";
 
 export const ShortURLSchema = z.object({
   id: z.string().min(1),
   name: z.string().min(1),
   original: z.string().url(),
   short: z.string().url(),
-  createdAt: z.date(),
-  updatedAt: z.date(),
 });
 
 export default class ShortURL {
@@ -19,8 +19,6 @@ export default class ShortURL {
   private name: string;
   private original: string;
   private short: string;
-  private createdAt: Date;
-  private updatedAt: Date;
 
   constructor(originalUrl: string, name: string) {
     const envConfig = new Config();
@@ -33,9 +31,7 @@ export default class ShortURL {
       NODE_ENV === "development"
         ? `http://localhost:${PORT}`
         : `https://${DOMAIN}`
-    }/${this.generate()}`;
-    this.createdAt = new Date();
-    this.updatedAt = new Date();
+    }/${this.id}`;
   }
 
   getLength() {
@@ -53,8 +49,6 @@ export default class ShortURL {
       name: this.name,
       original: this.original,
       short: this.short,
-      createdAt: this.createdAt,
-      updatedAt: this.updatedAt,
     });
   }
   getID() {
@@ -69,16 +63,9 @@ export default class ShortURL {
   getShort() {
     return this.short;
   }
-  getCreatedAt() {
-    return this.createdAt;
-  }
-  getUpdatedAt() {
-    return this.updatedAt;
-  }
 
   setName(newName: string) {
     this.name = newName;
-    this.updatedAt = new Date();
 
     /**
      *  @todo DB call
@@ -88,13 +75,28 @@ export default class ShortURL {
   }
   setOriginal(newOriginal: string) {
     this.original = newOriginal;
-    this.updatedAt = new Date();
 
     /**
      *  @todo DB call
      */
 
     return this.get();
+  }
+
+  async insertOne() {
+    return db
+      .insert(urls)
+      .values({
+        name: this.name,
+        original: this.original,
+        short: this.short,
+        id: this.id,
+      })
+      .returning();
+  }
+
+  async getOne(id: string) {
+    return db.select().from(urls).where(eq(urls.id, id));
   }
 
   /**

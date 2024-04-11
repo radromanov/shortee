@@ -1,16 +1,15 @@
 import express from "express";
 import ShortURL from "./api/short-url/ShortURL";
-import Database from "./core/Database";
 import Config from "./core/Config";
 
 const app = express();
-const db = new Database(new Config());
 
 app.get("/", async (_req, res) => {
   const shorty = new ShortURL("https://www.google.com", "Google");
 
   console.log(shorty.get());
-  db.close();
+  console.log(await shorty.insertOne());
+  console.log(await shorty.getOne(shorty.getID()));
 
   res.json({ message: "Hello world!" });
 });
