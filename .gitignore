@@ -8,6 +8,8 @@ node_modules/
 # Ignore environment-specific files
 .env
 
+migrations/
+
 # Ignore logs and databases
 logs/
 *.log
