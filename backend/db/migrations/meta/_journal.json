@@ -29,6 +29,20 @@
       "when": 1712830641693,
       "tag": "0003_first_dragon_man",
       "breakpoints": true
+    },
+    {
+      "idx": 4,
+      "version": "5",
+      "when": 1712838017738,
+      "tag": "0004_striped_echo",
+      "breakpoints": true
+    },
+    {
+      "idx": 5,
+      "version": "5",
+      "when": 1712839112735,
+      "tag": "0005_broad_doomsday",
+      "breakpoints": true
     }
   ]
 }

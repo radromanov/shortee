@@ -6,7 +6,10 @@
   "author": "Radostin Romanov",
   "license": "MIT",
   "scripts": {
-    "dev": "nodemon src/index.ts"
+    "dev": "nodemon src/index.ts",
+    "generate": "yarn drizzle-kit generate:pg",
+    "push": "yarn drizzle-kit push:pg",
+    "studio": "yarn drizzle-kit studio"
   },
   "devDependencies": {
     "@types/cors": "^2.8.17",

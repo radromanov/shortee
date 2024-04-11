@@ -1,7 +1,8 @@
 import z from "zod";
-import Config from "../../core/Config";
 import { db, urls } from "../../../db/schema/urls";
 import { eq } from "drizzle-orm";
+import ID from "../id/id";
+import { ids } from "../../../db/schema/ids";
 
 export const ShortURLSchema = z.object({
   id: z.string().min(1),
@@ -13,29 +14,8 @@ export const ShortURLSchema = z.object({
 
 export default class ShortURL {
   private SHORTURL_LENGTH: 10 | 12 | 14 = 12;
-  private CHARACTERS =
-    "qwertyuiopasdfghjklzxcvbnmQWERTYUIOPASDFGHJKLZXCVBNM0123456789-_~";
 
-  private id: string;
-  private ownerId: string;
-  private name: string;
-  private original: string;
-  private short: string;
-
-  constructor(originalUrl: string, name: string, ownerId: string) {
-    const envConfig = new Config();
-    const { PORT, NODE_ENV, DOMAIN } = envConfig.get();
-
-    this.id = this.generate();
-    this.ownerId = ownerId;
-    this.name = name;
-    this.original = originalUrl;
-    this.short = `${
-      NODE_ENV === "development"
-        ? `http://localhost:${PORT}`
-        : `https://${DOMAIN}`
-    }/${this.id}`;
-  }
+  constructor(private readonly idManager: ID) {}
 
   getLength() {
     return this.SHORTURL_LENGTH;
@@ -46,56 +26,25 @@ export default class ShortURL {
     return this.SHORTURL_LENGTH;
   }
 
-  get() {
-    return ShortURLSchema.parse({
-      id: this.id,
-      ownerId: this.ownerId,
-      name: this.name,
-      original: this.original,
-      short: this.short,
-    });
-  }
-  getID() {
-    return this.id;
-  }
-  getName() {
-    return this.name;
-  }
-  getOriginal() {
-    return this.original;
-  }
-  getShort() {
-    return this.short;
-  }
-
-  setName(newName: string) {
-    this.name = newName;
-
-    /**
-     *  @todo DB call
-     */
-
-    return this.get();
-  }
-  setOriginal(newOriginal: string) {
-    this.original = newOriginal;
-
-    /**
-     *  @todo DB call
-     */
-
-    return this.get();
-  }
-
-  async insertOne() {
+  async insertOne({
+    name,
+    original,
+    short,
+    ownerId,
+  }: {
+    name: string;
+    original: string;
+    short: string;
+    ownerId: string;
+  }) {
     return db
       .insert(urls)
       .values({
-        name: this.name,
-        original: this.original,
-        short: this.short,
-        id: this.id,
-        ownerId: this.ownerId,
+        name,
+        original,
+        short,
+        id: short,
+        ownerId,
       })
       .returning();
   }
@@ -105,36 +54,10 @@ export default class ShortURL {
   }
 
   async deleteOne(id: string) {
+    await db
+      .update(ids)
+      .set({ taken: false, updatedAt: new Date(new Date().toLocaleString()) })
+      .where(eq(ids.id, id));
     return await db.delete(urls).where(eq(urls.id, id));
-  }
-
-  /**
-   * Creates the short url.
-   * @param length Defaults to a length of `12`. Can only be `10`, `12`, `14`.
-   */
-  private generate(length: typeof this.SHORTURL_LENGTH = this.SHORTURL_LENGTH) {
-    let url = "";
-    let lastCharacter = "";
-
-    for (let i = 0; i < length; i++) {
-      let randomCharacter = this.pickRandomCharacter();
-
-      // Ensure current character is not the same as the last one
-      while (randomCharacter === lastCharacter) {
-        randomCharacter = this.pickRandomCharacter();
-      }
-
-      lastCharacter = randomCharacter;
-      url += randomCharacter;
-    }
-
-    return url;
-  }
-
-  private pickRandomCharacter(characters: string = this.CHARACTERS) {
-    let randomCharacterIndex = Math.floor(Math.random() * characters.length);
-    let randomCharacter = characters[randomCharacterIndex];
-
-    return randomCharacter!;
   }
 }
