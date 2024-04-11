@@ -5,6 +5,7 @@ import { eq } from "drizzle-orm";
 
 export const ShortURLSchema = z.object({
   id: z.string().min(1),
+  ownerId: z.string().min(1),
   name: z.string().min(1),
   original: z.string().url(),
   short: z.string().url(),
@@ -16,15 +17,17 @@ export default class ShortURL {
     "qwertyuiopasdfghjklzxcvbnmQWERTYUIOPASDFGHJKLZXCVBNM0123456789-_~";
 
   private id: string;
+  private ownerId: string;
   private name: string;
   private original: string;
   private short: string;
 
-  constructor(originalUrl: string, name: string) {
+  constructor(originalUrl: string, name: string, ownerId: string) {
     const envConfig = new Config();
     const { PORT, NODE_ENV, DOMAIN } = envConfig.get();
 
     this.id = this.generate();
+    this.ownerId = ownerId;
     this.name = name;
     this.original = originalUrl;
     this.short = `${
@@ -46,6 +49,7 @@ export default class ShortURL {
   get() {
     return ShortURLSchema.parse({
       id: this.id,
+      ownerId: this.ownerId,
       name: this.name,
       original: this.original,
       short: this.short,
@@ -91,12 +95,17 @@ export default class ShortURL {
         original: this.original,
         short: this.short,
         id: this.id,
+        ownerId: this.ownerId,
       })
       .returning();
   }
 
   async getOne(id: string) {
     return db.select().from(urls).where(eq(urls.id, id));
+  }
+
+  async deleteOne(id: string) {
+    return await db.delete(urls).where(eq(urls.id, id));
   }
 
   /**

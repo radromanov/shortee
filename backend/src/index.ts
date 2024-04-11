@@ -5,7 +5,7 @@ import Config from "./core/Config";
 const app = express();
 
 app.get("/", async (_req, res) => {
-  const shorty = new ShortURL("https://www.google.com", "Google");
+  const shorty = new ShortURL("https://www.google.com", "Google", "123oadxcxc");
 
   console.log(shorty.get());
   console.log(await shorty.insertOne());

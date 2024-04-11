@@ -15,6 +15,20 @@
       "when": 1712819420486,
       "tag": "0001_easy_meggan",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "5",
+      "when": 1712828679588,
+      "tag": "0002_tiny_proteus",
+      "breakpoints": true
+    },
+    {
+      "idx": 3,
+      "version": "5",
+      "when": 1712830641693,
+      "tag": "0003_first_dragon_man",
+      "breakpoints": true
     }
   ]
 }
