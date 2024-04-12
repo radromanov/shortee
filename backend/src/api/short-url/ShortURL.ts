@@ -4,6 +4,7 @@ import { eq } from "drizzle-orm";
 import ID from "../id/id";
 import { ids } from "../../../db/schema/ids";
 import Config from "../../core/Config";
+import Exception from "../../core/Exception";
 
 export const ShortURLSchema = z.object({
   id: z.string().min(1),
@@ -33,25 +34,25 @@ export default class ShortURL {
 
     if (!parsedPayload.success) {
       console.log(parsedPayload.error.message);
-      throw new Error(parsedPayload.error.message);
+      throw new Exception(parsedPayload.error.message, "Unprocessable Content");
     }
 
     const { PORT, NODE_ENV, DOMAIN } = this.config.get();
     const { name, original, ownerId } = parsedPayload.data;
 
-    const short = await this.idManager.insertOne();
-    const shortUrl =
+    const id = await this.idManager.insertOne();
+    const short =
       NODE_ENV === "development"
-        ? `http://localhost:${PORT}/${short}`
-        : `https://${DOMAIN}/${short}`;
+        ? `http://localhost:${PORT}/${id}`
+        : `https://${DOMAIN}/${id}`;
 
-    return db
+    return await db
       .insert(urls)
       .values({
         name,
         original,
-        short: shortUrl,
-        id: short,
+        short,
+        id,
         ownerId,
       })
       .returning();
@@ -67,5 +68,16 @@ export default class ShortURL {
       .set({ taken: false, updatedAt: new Date(new Date().toLocaleString()) })
       .where(eq(ids.id, id));
     return await db.delete(urls).where(eq(urls.id, id));
+  }
+
+  async isExists(id: string) {
+    console.log(
+      await db.select({ taken: ids.id }).from(ids).where(eq(ids.id, id))
+    );
+    return (
+      await db.select({ taken: ids.taken }).from(ids).where(eq(ids.id, id))
+    ).length
+      ? true
+      : false;
   }
 }
