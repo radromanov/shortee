@@ -3,6 +3,7 @@ import { db, urls } from "../../../db/schema/urls";
 import { eq } from "drizzle-orm";
 import ID from "../id/id";
 import { ids } from "../../../db/schema/ids";
+import Config from "../../core/Config";
 
 export const ShortURLSchema = z.object({
   id: z.string().min(1),
@@ -12,37 +13,44 @@ export const ShortURLSchema = z.object({
   short: z.string().url(),
 });
 
+const URLPayloadSchema = z.object({
+  name: z.string().min(1),
+  original: z.string().min(1),
+  ownerId: z.string().min(1),
+});
+type URLPayload = z.infer<typeof URLPayloadSchema>;
+
 export default class ShortURL {
-  private SHORTURL_LENGTH: 10 | 12 | 14 = 12;
+  constructor(
+    private readonly config: Config,
+    private readonly idManager: ID
+  ) {}
 
-  constructor(private readonly idManager: ID) {}
+  async insertOne(payload: URLPayload) {
+    // TODO Format the original URL
 
-  getLength() {
-    return this.SHORTURL_LENGTH;
-  }
+    const parsedPayload = URLPayloadSchema.safeParse(payload);
 
-  setLength(length: typeof this.SHORTURL_LENGTH) {
-    this.SHORTURL_LENGTH = length;
-    return this.SHORTURL_LENGTH;
-  }
+    if (!parsedPayload.success) {
+      console.log(parsedPayload.error.message);
+      throw new Error(parsedPayload.error.message);
+    }
 
-  async insertOne({
-    name,
-    original,
-    short,
-    ownerId,
-  }: {
-    name: string;
-    original: string;
-    short: string;
-    ownerId: string;
-  }) {
+    const { PORT, NODE_ENV, DOMAIN } = this.config.get();
+    const { name, original, ownerId } = parsedPayload.data;
+
+    const short = await this.idManager.insertOne();
+    const shortUrl =
+      NODE_ENV === "development"
+        ? `http://localhost:${PORT}/${short}`
+        : `https://${DOMAIN}/${short}`;
+
     return db
       .insert(urls)
       .values({
         name,
         original,
-        short,
+        short: shortUrl,
         id: short,
         ownerId,
       })
