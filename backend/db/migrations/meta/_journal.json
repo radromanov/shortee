@@ -43,6 +43,13 @@
       "when": 1712839112735,
       "tag": "0005_broad_doomsday",
       "breakpoints": true
+    },
+    {
+      "idx": 6,
+      "version": "5",
+      "when": 1712923570439,
+      "tag": "0006_hesitant_harrier",
+      "breakpoints": true
     }
   ]
 }

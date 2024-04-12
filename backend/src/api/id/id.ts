@@ -1,14 +1,13 @@
 import { eq } from "drizzle-orm";
 import { ids } from "../../../db/schema/ids";
-import { db } from "../../../db/schema/urls";
 import Config from "../../core/Config";
+import { db } from "../../../db/schema/urls";
 
 const LENGTH: 8 | 12 | 16 = 12;
 
 export default class ID {
   constructor(
     private readonly config: Config,
-    private readonly database: typeof db,
     private readonly length: typeof LENGTH = LENGTH
   ) {}
 
@@ -41,7 +40,7 @@ export default class ID {
   }
 
   private async isExists(id: string) {
-    const idFound = await this.database
+    const idFound = await db
       .select({ taken: ids.taken })
       .from(ids)
       .where(eq(ids.id, id));
@@ -57,7 +56,7 @@ export default class ID {
       id = this.generate();
     }
 
-    await this.database.insert(ids).values({ id });
+    await db.insert(ids).values({ id });
 
     return id;
   }

@@ -4,7 +4,7 @@ import { urls } from "./urls";
 
 export const users = pgTable("users", {
   id: varchar("id", { length: 16 }).primaryKey(),
-  name: varchar("name", { length: 256 }).notNull(),
+  username: varchar("username", { length: 256 }).notNull(),
   email: varchar("email", { length: 256 }).notNull(),
   password: varchar("password", { length: 256 }).notNull(),
   createdAt: timestamp("createdAt").defaultNow().notNull(),

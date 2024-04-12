@@ -1,7 +1,9 @@
-import { Config } from "drizzle-kit";
 import ID from "../id/id";
 import z from "zod";
 import Exception from "../../core/Exception";
+import Config from "../../core/Config";
+import { db } from "../../../db/schema/urls";
+import { users } from "../../../db/schema/users";
 
 const UserInfoSchema = z.object({
   username: z.string().min(3).max(32),
@@ -24,7 +26,17 @@ export default class User {
       throw new Exception(parsedPayload.error.message, "Unprocessable Content");
     }
 
-    console.log(parsedPayload.data);
-    return parsedPayload.data;
+    const user = {
+      id: await this.idManager.insertOne(),
+      username: parsedPayload.data.username,
+      password: parsedPayload.data.password,
+      email: parsedPayload.data.email,
+    };
+
+    return await db.insert(users).values(user).returning({
+      id: users.id,
+      username: users.username,
+      email: users.email,
+    });
   }
 }
