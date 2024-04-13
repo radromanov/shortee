@@ -19,7 +19,7 @@ export default class Application {
   initialize() {
     const userRoutes = new UserModule(
       this.app,
-      new User(this.config, new ID(this.config))
+      new User(new ID(this.config))
     ).init();
 
     this.setup();
