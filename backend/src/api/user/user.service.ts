@@ -8,6 +8,7 @@ import { UserInfoPayload } from "./user.type";
 import { users } from "../../../db/schema/users";
 import { eq } from "drizzle-orm";
 import { db } from "../../../db/schema/urls";
+import { resolve } from "path";
 
 export default class UserService {
   constructor(
@@ -35,6 +36,42 @@ export default class UserService {
     };
 
     return await this.manager.insertOne(user);
+  }
+
+  async authorize(payload: any) {
+    const notExist = !(await this.isExist({ email: payload.email }));
+
+    if (notExist) {
+      throw new Exception(
+        "Incorrect email or password. Please, try again.",
+        "Unauthorized"
+      );
+    }
+
+    const [user] = await db
+      .select({ password: users.password })
+      .from(users)
+      .where(eq(users.email, payload.email));
+
+    if (!user?.password) {
+      throw new Exception(
+        "Something went wrong. Please, try again.",
+        "Internal Server Error"
+      );
+    }
+
+    console.log(user, payload.password);
+
+    const match = await bcrypt.compare(payload.password, user.password);
+
+    if (!match) {
+      throw new Exception(
+        "Incorrect email or password. Please, try again.",
+        "Unauthorized"
+      );
+    }
+
+    return true;
   }
 
   async isExist(payload: { email: string }): Promise<boolean>;

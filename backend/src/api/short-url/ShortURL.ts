@@ -23,8 +23,8 @@ type URLPayload = z.infer<typeof URLPayloadSchema>;
 
 export default class ShortURL {
   constructor(
-    private readonly config: Config,
-    private readonly idManager: ID
+    private readonly config: Config = new Config(),
+    private readonly idManager: ID = new ID()
   ) {}
 
   async insertOne(payload: URLPayload) {

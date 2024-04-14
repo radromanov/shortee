@@ -17,6 +17,20 @@ export default class UserController {
 
     const user = await this.service.insertOne(payload.data);
 
-    res.json(user);
+    res.status(201).json(user);
+  }
+
+  async handleLogin(req: Request, res: Response) {
+    const payload = req.body;
+
+    const authorized = await this.service.authorize(payload);
+
+    if (!authorized) {
+      res
+        .status(401)
+        .json({ message: "Incorrect email or password. Please, try again..." });
+    }
+
+    res.status(201).json({ route: req.originalUrl, payload });
   }
 }

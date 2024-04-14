@@ -31,6 +31,13 @@ export default class UserModule {
       )
     );
 
+    this.router.post(
+      "/login",
+      asyncErrorHandler(async (req, res) =>
+        this.controller.handleLogin(req, res)
+      )
+    );
+
     this.app.use(this.PREFIX, this.router);
   }
 }
