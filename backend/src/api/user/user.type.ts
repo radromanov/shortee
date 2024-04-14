@@ -31,3 +31,12 @@ export const UserInfoSchema = z.object({
 });
 
 export type UserInfoPayload = z.infer<typeof UserInfoSchema>;
+
+export const UserPayload = z.object({
+  username,
+  email,
+  password,
+  id: z.string(),
+});
+
+export type UserPayload = z.infer<typeof UserPayload>;
