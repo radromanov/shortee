@@ -1,4 +1,4 @@
-import express, { Router, Express, Request, Response } from "express";
+import express, { Router, Express } from "express";
 import cors from "cors";
 import helmet from "helmet";
 import morgan from "morgan";
@@ -6,8 +6,6 @@ import Config from "./Config";
 import UserModule from "../api/user/user.module";
 import NotFoundMiddleware from "../api/exception/NotFound.middleware";
 import ExceptionMiddleware from "../api/exception/Exception.middleware";
-import User from "../api/user/User";
-import ID from "../api/id/id";
 
 export default class Application {
   private router: Router;
@@ -17,10 +15,7 @@ export default class Application {
   }
 
   initialize() {
-    const userRoutes = new UserModule(
-      this.app,
-      new User(new ID(this.config))
-    ).init();
+    const userRoutes = new UserModule(this.app).init();
 
     this.setup();
     this.modules([userRoutes]);

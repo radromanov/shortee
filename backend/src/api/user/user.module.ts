@@ -1,5 +1,6 @@
 import { Router, Express } from "express";
-import User from "./User";
+import UserController from "./user.controller";
+import { asyncErrorHandler } from "../../utils/asyncErrorHandler";
 
 export default class UserModule {
   private PREFIX = "/user" as const;
@@ -7,7 +8,7 @@ export default class UserModule {
 
   constructor(
     private readonly app: Express,
-    private readonly userManager: User
+    private readonly controller: UserController = new UserController()
   ) {
     this.router = Router();
   }
@@ -23,13 +24,12 @@ export default class UserModule {
       res.json({ message: `User ${req.originalUrl} route` });
     });
 
-    this.router.post("/sign-up", async (req, res) => {
-      const payload = req.body;
-
-      const user = await this.userManager.insertOne(payload);
-
-      res.json(user);
-    });
+    this.router.post(
+      "/sign-up",
+      asyncErrorHandler(async (req, res) =>
+        this.controller.handleSignUp(req, res)
+      )
+    );
 
     this.app.use(this.PREFIX, this.router);
   }

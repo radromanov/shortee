@@ -1,26 +1,18 @@
 import ID from "../id/id";
-import z from "zod";
 import Exception from "../../core/Exception";
 import { db } from "../../../db/schema/urls";
 import { users } from "../../../db/schema/users";
 import bcrypt from "bcrypt";
 import { eq } from "drizzle-orm";
-
-const UserInfoSchema = z.object({
-  username: z.string().min(3).max(32),
-  email: z.string().email(),
-  password: z.string().min(8).max(32),
-  confirmPassword: z.string(),
-});
-
-type UserInfoPayload = z.infer<typeof UserInfoSchema>;
+import { UserInfoPayload, UserInfoSchema } from "./user.type";
 
 export default class User {
-  constructor(private readonly idManager: ID) {}
+  constructor(private readonly idManager: ID = new ID()) {}
 
   async insertOne(payload: UserInfoPayload) {
     const parsedPayload = UserInfoSchema.safeParse(payload);
     if (!parsedPayload.success) {
+      console.log(parsedPayload.error);
       throw new Exception(parsedPayload.error.message, "Unprocessable Content");
     }
 

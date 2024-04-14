@@ -7,7 +7,7 @@ const LENGTH: 8 | 12 | 16 = 12;
 
 export default class ID {
   constructor(
-    private readonly config: Config,
+    private readonly config: Config = new Config(),
     private readonly length: typeof LENGTH = LENGTH
   ) {}
 
