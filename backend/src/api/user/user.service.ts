@@ -9,11 +9,13 @@ import { users } from "../../../db/schema/users";
 import { eq } from "drizzle-orm";
 import { db } from "../../../db/schema/urls";
 import comparePass from "../../utils/comparePass";
+import Auth from "../auth/Auth";
 
 export default class UserService {
   constructor(
     private readonly manager: User = new User(),
-    private readonly id: ID = new ID(new Config())
+    private readonly id: ID = new ID(new Config()),
+    private readonly auth: Auth = new Auth(new Config())
   ) {}
 
   async insertOne(payload: UserInfoPayload) {
@@ -55,7 +57,12 @@ export default class UserService {
 
     const user = await this.fetchPass({ email: payload.email });
 
-    return await comparePass(payload.password, user.password);
+    if ((await this.auth.compare(payload.password, user.password)).success) {
+      const token = this.auth.sign({ id: user.id });
+      return { success: true, token };
+    }
+
+    return { success: false, token: null };
   }
 
   async isExist(payload: { email: string }): Promise<boolean>;

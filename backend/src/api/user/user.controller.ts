@@ -25,12 +25,19 @@ export default class UserController {
 
     const authorized = await this.service.authorize(payload);
 
-    if (!authorized) {
-      res
+    if (!authorized.success || !authorized.token) {
+      return res
         .status(401)
         .json({ message: "Incorrect email or password. Please, try again..." });
     }
 
-    res.status(201).json({ route: req.originalUrl, payload });
+    return res
+      .status(201)
+      .setHeader("Authorization", "Bearer " + authorized.token)
+      .json({
+        route: req.originalUrl,
+        payload,
+        token: authorized.token,
+      });
   }
 }
