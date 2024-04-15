@@ -1,7 +1,7 @@
 import { eq } from "drizzle-orm";
 import { ids } from "../../../db/schema/ids";
-import Config from "../../core/Config";
 import { db } from "../../../db/schema/urls";
+import Config from "../../core/Config";
 
 const LENGTH: 8 | 12 | 16 = 12;
 

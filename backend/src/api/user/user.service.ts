@@ -1,21 +1,19 @@
 import bcrypt from "bcrypt";
 
-import Config from "../../core/Config";
-import Exception from "../../core/Exception";
 import ID from "../id/id";
 import User from "./User";
 import { UserInfoPayload, UserLoginSchema } from "./user.type";
 import { users } from "../../../db/schema/users";
 import { eq } from "drizzle-orm";
 import { db } from "../../../db/schema/urls";
-import comparePass from "../../utils/comparePass";
-import Auth from "../auth/Auth";
+import { fetchPass, validateAndSetToken } from "../../utils";
+import Config from "../../core/Config";
+import Exception from "../../core/Exception";
 
 export default class UserService {
   constructor(
     private readonly manager: User = new User(),
-    private readonly id: ID = new ID(new Config()),
-    private readonly auth: Auth = new Auth(new Config())
+    private readonly id: ID = new ID(new Config())
   ) {}
 
   async insertOne(payload: UserInfoPayload) {
@@ -55,14 +53,9 @@ export default class UserService {
       throw new Exception(UNAUTHORIZED_MESSAGE, "Unauthorized");
     }
 
-    const user = await this.fetchPass({ email: payload.email });
+    const user = await fetchPass({ email: payload.email });
 
-    if ((await this.auth.compare(payload.password, user.password)).success) {
-      const token = this.auth.sign({ id: user.id });
-      return { success: true, token };
-    }
-
-    return { success: false, token: null };
+    return await validateAndSetToken(payload.password, user);
   }
 
   async isExist(payload: { email: string }): Promise<boolean>;
@@ -92,36 +85,5 @@ export default class UserService {
       "Payload needs to contain 'username' or 'email' key!",
       "Bad Request"
     );
-  }
-
-  private async fetchPass(payload: {
-    email: string;
-  }): Promise<{ id: string; password: string }>;
-  private async fetchPass(payload: {
-    username: string;
-  }): Promise<{ id: string; password: string }>;
-  private async fetchPass(payload: { email: string } | { username: string }) {
-    let user: { id: string; password: string }[] = [];
-
-    if ("email" in payload) {
-      user = await db
-        .select({ password: users.password, id: users.id })
-        .from(users)
-        .where(eq(users.email, payload.email));
-    } else if ("username" in payload) {
-      user = await db
-        .select({ password: users.password, id: users.id })
-        .from(users)
-        .where(eq(users.username, payload.username));
-    }
-
-    if (!user.length) {
-      throw new Exception(
-        "Something went wrong. Please, try again.",
-        "Internal Server Error"
-      );
-    }
-
-    return user[0];
   }
 }

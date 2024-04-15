@@ -2,15 +2,18 @@ import express, { Router, Express } from "express";
 import cors from "cors";
 import helmet from "helmet";
 import morgan from "morgan";
-import Config from "./Config";
 import UserModule from "../api/user/user.module";
 import NotFoundMiddleware from "../api/exception/NotFound.middleware";
 import ExceptionMiddleware from "../api/exception/Exception.middleware";
+import Config from "./Config";
 
 export default class Application {
   private router: Router;
 
-  constructor(private readonly config: Config, private readonly app: Express) {
+  constructor(
+    private readonly app: Express,
+    private readonly config: Config = new Config()
+  ) {
     this.router = Router();
   }
 

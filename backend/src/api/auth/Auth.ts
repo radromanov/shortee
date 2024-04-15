@@ -1,16 +1,14 @@
-import Config from "../../core/Config";
-import bcrypt from "bcrypt";
-import Exception from "../../core/Exception";
 import Crypto from "crypto-js";
+import Config from "../../core/Config";
+import { comparePass } from "../../utils";
+import Exception from "../../core/Exception";
 
 export default class Auth {
   constructor(private readonly config: Config = new Config()) {}
 
   async compare(plainPass: string, hash: string) {
-    let success = false;
-    const match = await bcrypt.compare(plainPass, hash);
-
-    if (!match) {
+    const success = await comparePass(plainPass, hash);
+    if (!success) {
       throw new Exception(
         "Incorrect email or password. Please, try again.",
         "Unauthorized"
@@ -18,31 +16,8 @@ export default class Auth {
     }
 
     // TODO Send email with magic link
-    const token = this.generateToken();
-    success = true;
 
-    return { success, token };
-  }
-
-  private generateToken(length: 12 | 16 = 12) {
-    const characters = this.config.getOne("TOKEN_CHARS");
-    let token = "";
-    let lastCharacter = "";
-
-    for (let i = 0; i < length; i++) {
-      let randomCharacter =
-        characters[Math.floor(Math.random() * characters.length)];
-
-      while (lastCharacter === randomCharacter) {
-        randomCharacter =
-          characters[Math.floor(Math.random() * characters.length)];
-      }
-
-      lastCharacter = randomCharacter!;
-      token += randomCharacter;
-    }
-
-    return this.encode(token);
+    return success;
   }
 
   sign(payload: any) {
@@ -65,6 +40,11 @@ export default class Auth {
 
     return `${header}.${payload}.${signature}`;
   }
+
+  verify(payload: string) {
+    return this.decode(payload);
+  }
+
   private encode(str: string) {
     return Buffer.from(str, "utf8").toString("base64");
   }

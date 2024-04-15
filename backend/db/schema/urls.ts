@@ -1,10 +1,10 @@
-import Config from "../../src/core/Config";
 import postgres from "postgres";
 
 import { drizzle } from "drizzle-orm/postgres-js";
 import { varchar, pgTable, timestamp } from "drizzle-orm/pg-core";
 import { relations } from "drizzle-orm";
 import { users } from "./users";
+import Config from "../../src/core/Config";
 
 const DB_URI = new Config().getOne("DB_URI");
 
