@@ -29,14 +29,17 @@ export const UserInfoSchema = z.object({
   password,
   confirmPassword: z.string(),
 });
-
-export type UserInfoPayload = z.infer<typeof UserInfoSchema>;
-
 export const UserPayload = z.object({
   username,
   email,
   password,
   id: z.string(),
 });
+export const UserLoginSchema = z.object({
+  email,
+  password,
+});
 
+export type UserInfoPayload = z.infer<typeof UserInfoSchema>;
 export type UserPayload = z.infer<typeof UserPayload>;
+export type UserLoginPayload = z.infer<typeof UserLoginSchema>;

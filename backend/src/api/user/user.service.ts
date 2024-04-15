@@ -4,11 +4,11 @@ import Config from "../../core/Config";
 import Exception from "../../core/Exception";
 import ID from "../id/id";
 import User from "./User";
-import { UserInfoPayload } from "./user.type";
+import { UserInfoPayload, UserLoginSchema } from "./user.type";
 import { users } from "../../../db/schema/users";
 import { eq } from "drizzle-orm";
 import { db } from "../../../db/schema/urls";
-import { resolve } from "path";
+import comparePass from "../../utils/comparePass";
 
 export default class UserService {
   constructor(
@@ -38,40 +38,24 @@ export default class UserService {
     return await this.manager.insertOne(user);
   }
 
-  async authorize(payload: any) {
+  async authorize(payload: { email: string; password: string }) {
+    const UNAUTHORIZED_MESSAGE =
+      "Incorrect email or password. Please, try again." as const;
+
+    const parsedPayload = UserLoginSchema.safeParse(payload);
+    if (!parsedPayload.success) {
+      throw new Exception(UNAUTHORIZED_MESSAGE, "Unauthorized");
+    }
+
     const notExist = !(await this.isExist({ email: payload.email }));
 
     if (notExist) {
-      throw new Exception(
-        "Incorrect email or password. Please, try again.",
-        "Unauthorized"
-      );
+      throw new Exception(UNAUTHORIZED_MESSAGE, "Unauthorized");
     }
 
-    const [user] = await db
-      .select({ password: users.password })
-      .from(users)
-      .where(eq(users.email, payload.email));
+    const user = await this.fetchPass({ email: payload.email });
 
-    if (!user?.password) {
-      throw new Exception(
-        "Something went wrong. Please, try again.",
-        "Internal Server Error"
-      );
-    }
-
-    console.log(user, payload.password);
-
-    const match = await bcrypt.compare(payload.password, user.password);
-
-    if (!match) {
-      throw new Exception(
-        "Incorrect email or password. Please, try again.",
-        "Unauthorized"
-      );
-    }
-
-    return true;
+    return await comparePass(payload.password, user.password);
   }
 
   async isExist(payload: { email: string }): Promise<boolean>;
@@ -101,5 +85,36 @@ export default class UserService {
       "Payload needs to contain 'username' or 'email' key!",
       "Bad Request"
     );
+  }
+
+  private async fetchPass(payload: {
+    email: string;
+  }): Promise<{ id: string; password: string }>;
+  private async fetchPass(payload: {
+    username: string;
+  }): Promise<{ id: string; password: string }>;
+  private async fetchPass(payload: { email: string } | { username: string }) {
+    let user: { id: string; password: string }[] = [];
+
+    if ("email" in payload) {
+      user = await db
+        .select({ password: users.password, id: users.id })
+        .from(users)
+        .where(eq(users.email, payload.email));
+    } else if ("username" in payload) {
+      user = await db
+        .select({ password: users.password, id: users.id })
+        .from(users)
+        .where(eq(users.username, payload.username));
+    }
+
+    if (!user.length) {
+      throw new Exception(
+        "Something went wrong. Please, try again.",
+        "Internal Server Error"
+      );
+    }
+
+    return user[0];
   }
 }
