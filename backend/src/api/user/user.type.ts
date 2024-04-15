@@ -33,7 +33,6 @@ export const UserPayload = z.object({
   username,
   email,
   password,
-  id: z.string(),
 });
 export const UserLoginSchema = z.object({
   email,

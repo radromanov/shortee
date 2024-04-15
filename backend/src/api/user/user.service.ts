@@ -1,20 +1,15 @@
 import bcrypt from "bcrypt";
 
-import ID from "../id/id";
 import User from "./User";
 import { UserInfoPayload, UserLoginSchema } from "./user.type";
 import { users } from "../../../db/schema/users";
 import { eq } from "drizzle-orm";
 import { db } from "../../../db/schema/urls";
 import { fetchPass, validateAndSetToken } from "../../utils";
-import Config from "../../core/Config";
 import Exception from "../../core/Exception";
 
 export default class UserService {
-  constructor(
-    private readonly manager: User = new User(),
-    private readonly id: ID = new ID(new Config())
-  ) {}
+  constructor(private readonly manager: User = new User()) {}
 
   async insertOne(payload: UserInfoPayload) {
     // Check if user exists
@@ -29,7 +24,6 @@ export default class UserService {
     }
 
     const user = {
-      id: await this.id.insertOne(),
       username: payload.username,
       password: await bcrypt.hash(payload.password, 12),
       email: payload.email,
