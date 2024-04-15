@@ -3,7 +3,7 @@ import UserController from "./user.controller";
 import { asyncErrorHandler } from "../../utils/asyncErrorHandler";
 
 export default class UserModule {
-  private PREFIX = "/user" as const;
+  private readonly PREFIX = "/user";
   private router: Router;
 
   constructor(

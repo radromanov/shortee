@@ -6,6 +6,7 @@ import UserModule from "../api/user/user.module";
 import NotFoundMiddleware from "../api/exception/NotFound.middleware";
 import ExceptionMiddleware from "../api/exception/Exception.middleware";
 import Config from "./Config";
+import ShortURLModule from "../api/short-url/shortUrl.module";
 
 export default class Application {
   private router: Router;
@@ -19,9 +20,10 @@ export default class Application {
 
   initialize() {
     const userRoutes = new UserModule(this.app).init();
+    const urlRoutes = new ShortURLModule(this.app).init();
 
     this.setup();
-    this.modules([userRoutes]);
+    this.modules([userRoutes, urlRoutes]);
 
     this.app.all("*", NotFoundMiddleware);
     this.app.use(ExceptionMiddleware);
