@@ -23,6 +23,8 @@ export default class UserController {
   async handleLogin(req: Request, res: Response) {
     const payload = req.body;
 
+    console.log(payload);
+
     const authorized = await this.service.authorize(payload);
 
     if (!authorized.success || !authorized.token) {
@@ -31,13 +33,11 @@ export default class UserController {
         .json({ message: "Incorrect email or password. Please, try again..." });
     }
 
+    req.headers.authorization = "Bearer " + authorized.token;
+
     return res
-      .status(201)
-      .setHeader("Authorization", "Bearer " + authorized.token)
-      .json({
-        route: req.originalUrl,
-        payload,
-        token: authorized.token,
-      });
+      .setHeader("Access-Control-Allow-Headers", "Content-Type, Authorization")
+      .status(200)
+      .send(req.headers.authorization);
   }
 }

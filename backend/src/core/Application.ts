@@ -40,11 +40,16 @@ export default class Application {
   }
 
   private setup() {
-    const MORGAN = this.config.getOne("MORGAN");
+    const { MORGAN, DOMAIN, NODE_ENV } = this.config.get();
 
     this.app.use(morgan(MORGAN));
     this.app.use(helmet());
-    this.app.use(cors());
+    this.app.use(
+      cors({
+        origin: NODE_ENV === "development" ? "http://localhost:5173" : DOMAIN,
+        credentials: true,
+      })
+    );
 
     this.app.use(express.json());
     this.app.use(express.urlencoded({ extended: true }));
