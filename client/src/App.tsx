@@ -3,18 +3,15 @@ import { FormEvent, useState } from "react";
 function App() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [formData, setFormData] = useState({ email: "", password: "" });
 
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
-    console.log(e.target);
-
-    setFormData({ email, password });
-
-    console.log(formData);
     await fetch("http://localhost:3001/api/v1/user/login", {
-      body: JSON.stringify(formData),
+      body: JSON.stringify({
+        email,
+        password,
+      }),
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -37,7 +34,7 @@ function App() {
             </p>
             <input
               value={email}
-              onChange={(e) => setEmail(e.currentTarget.value)}
+              onChange={(e) => setEmail(e.target.value)}
               name="email"
               id="email"
               type="email"
@@ -52,7 +49,7 @@ function App() {
             </p>
             <input
               value={password}
-              onChange={(e) => setPassword(e.currentTarget.value)}
+              onChange={(e) => setPassword(e.target.value)}
               name="password"
               id="password"
               type="password"

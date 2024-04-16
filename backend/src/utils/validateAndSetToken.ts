@@ -8,13 +8,13 @@ export async function validateAndSetToken(
   const success = await auth.compare(incomingPassword, user.password);
 
   if (success) {
-    const token = auth.sign({
-      id: user.id,
-      username: user.username,
-      email: user.email,
-    });
-    return { success, token };
+    // const token = auth.sign({
+    //   id: user.id,
+    //   username: user.username,
+    //   email: user.email,
+    // });
+    return { success, id: user.id };
   }
 
-  return { success, token: null };
+  return { success, id: null };
 }

@@ -1,4 +1,5 @@
 import express, { Router, Express } from "express";
+import session from "express-session";
 import cors from "cors";
 import helmet from "helmet";
 import morgan from "morgan";
@@ -7,13 +8,15 @@ import NotFoundMiddleware from "../api/exception/NotFound.middleware";
 import ExceptionMiddleware from "../api/exception/Exception.middleware";
 import Config from "./Config";
 import ShortURLModule from "../api/short-url/shortUrl.module";
+import Auth from "../api/auth/Auth";
 
 export default class Application {
   private router: Router;
 
   constructor(
     private readonly app: Express,
-    private readonly config: Config = new Config()
+    private readonly config: Config = new Config(),
+    private readonly auth: Auth = new Auth()
   ) {
     this.router = Router();
   }
@@ -50,6 +53,8 @@ export default class Application {
         credentials: true,
       })
     );
+
+    this.app.use(session(this.auth.session()));
 
     this.app.use(express.json());
     this.app.use(express.urlencoded({ extended: true }));

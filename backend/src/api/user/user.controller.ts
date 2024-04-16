@@ -27,17 +27,16 @@ export default class UserController {
 
     const authorized = await this.service.authorize(payload);
 
-    if (!authorized.success || !authorized.token) {
+    if (!authorized.success || !authorized.id) {
       return res
         .status(401)
         .json({ message: "Incorrect email or password. Please, try again..." });
     }
 
-    req.headers.authorization = "Bearer " + authorized.token;
+    // req.headers.authorization = "Bearer " + authorized.token;
 
-    return res
-      .setHeader("Access-Control-Allow-Headers", "Content-Type, Authorization")
-      .status(200)
-      .send(req.headers.authorization);
+    req.sessionStore.set(authorized.id, req.session);
+
+    return res.status(200).cookie("sid", authorized.id).send();
   }
 }
