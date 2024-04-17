@@ -10,6 +10,7 @@ import Config from "./Config";
 import ShortURLModule from "../api/short-url/shortUrl.module";
 import Auth from "../api/auth/Auth";
 import Cache from "./Cache";
+import AuthModule from "../api/auth/auth.module";
 
 export default class Application {
   private router: Router;
@@ -26,9 +27,10 @@ export default class Application {
   initialize() {
     const userRoutes = new UserModule(this.app).init();
     const urlRoutes = new ShortURLModule(this.app).init();
+    const authRoutes = new AuthModule(this.app).init();
 
     this.setup();
-    this.modules([userRoutes, urlRoutes]);
+    this.modules([userRoutes, urlRoutes, authRoutes]);
 
     this.app.all("*", NotFoundMiddleware);
     this.app.use(ExceptionMiddleware);

@@ -13,7 +13,7 @@ function App() {
   const handleLogin = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
-    const data = await fetch("http://localhost:3001/api/v1/user/login", {
+    const data = await fetch("http://localhost:3001/api/v1/auth/login", {
       body: JSON.stringify({
         email,
         password,
@@ -56,9 +56,14 @@ function App() {
   return (
     <main className="w-screen h-screen flex justify-center items-center">
       {authedUser?.id ? (
-        <form onSubmit={handleLogout}>
-          <button type="submit">Logout</button>
-        </form>
+        <>
+          <p>
+            <span>{JSON.stringify(authedUser)}</span>
+          </p>
+          <form onSubmit={handleLogout}>
+            <button type="submit">Logout</button>
+          </form>
+        </>
       ) : (
         <form id="login-form" onSubmit={handleLogin}>
           <div>
