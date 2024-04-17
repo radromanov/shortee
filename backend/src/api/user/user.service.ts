@@ -1,11 +1,9 @@
 import bcrypt from "bcrypt";
-
 import User from "./User";
-import { UserInfoPayload, UserLoginSchema } from "./user.type";
+import { UserInfoPayload } from "./user.type";
 import { users } from "../../../db/schema/users";
 import { eq } from "drizzle-orm";
 import { db } from "../../../db/schema/urls";
-import { fetchPass, validateAndSetToken } from "../../utils";
 import Exception from "../../core/Exception";
 
 export default class UserService {
@@ -30,26 +28,6 @@ export default class UserService {
     };
 
     return await this.manager.insertOne(user);
-  }
-
-  async authorize(payload: { email: string; password: string }) {
-    const UNAUTHORIZED_MESSAGE =
-      "Incorrect email or password. Please, try again." as const;
-
-    const parsedPayload = UserLoginSchema.safeParse(payload);
-    if (!parsedPayload.success) {
-      throw new Exception(UNAUTHORIZED_MESSAGE, "Unauthorized");
-    }
-
-    const notExist = !(await this.isExist({ email: payload.email }));
-
-    if (notExist) {
-      throw new Exception(UNAUTHORIZED_MESSAGE, "Unauthorized");
-    }
-
-    const user = await fetchPass({ email: payload.email });
-
-    return await validateAndSetToken(payload.password, user);
   }
 
   async isExist(payload: { email: string }): Promise<boolean>;

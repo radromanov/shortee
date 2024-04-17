@@ -38,7 +38,13 @@ export const UserLoginSchema = z.object({
   email,
   password,
 });
+export const UserSessionSchema = z.object({
+  id: z.string(),
+  username,
+  email,
+});
 
 export type UserInfoPayload = z.infer<typeof UserInfoSchema>;
 export type UserPayload = z.infer<typeof UserPayload>;
 export type UserLoginPayload = z.infer<typeof UserLoginSchema>;
+export type UserSession = z.infer<typeof UserSessionSchema>;

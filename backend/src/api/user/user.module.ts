@@ -1,6 +1,7 @@
 import { Router, Express } from "express";
 import UserController from "./user.controller";
 import { asyncErrorHandler } from "../../utils/asyncErrorHandler";
+import { isAuthed } from "../../utils/isAuthed";
 
 export default class UserModule {
   private readonly PREFIX = "/user";
@@ -20,29 +21,14 @@ export default class UserModule {
   }
 
   private routes() {
-    this.router.get(
-      "/:id",
-      asyncErrorHandler(async (req, res) => this.controller.handleGet(req, res))
-    );
+    this.router.get("/", isAuthed, (req, res) => {
+      res.sendStatus(req.sessionID ? 200 : 401);
+    });
 
     this.router.post(
       "/sign-up",
       asyncErrorHandler(async (req, res) =>
         this.controller.handleSignUp(req, res)
-      )
-    );
-
-    this.router.post(
-      "/login",
-      asyncErrorHandler(async (req, res) =>
-        this.controller.handleLogin(req, res)
-      )
-    );
-
-    this.router.post(
-      "/logout",
-      asyncErrorHandler(async (req, res) =>
-        this.controller.handleLogout(req, res)
       )
     );
 

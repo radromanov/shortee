@@ -9,6 +9,7 @@ import ExceptionMiddleware from "../api/exception/Exception.middleware";
 import Config from "./Config";
 import ShortURLModule from "../api/short-url/shortUrl.module";
 import Auth from "../api/auth/Auth";
+import Cache from "./Cache";
 
 export default class Application {
   private router: Router;
@@ -16,6 +17,7 @@ export default class Application {
   constructor(
     private readonly app: Express,
     private readonly config: Config = new Config(),
+    private readonly cache: Cache = new Cache(),
     private readonly auth: Auth = new Auth()
   ) {
     this.router = Router();
@@ -54,7 +56,7 @@ export default class Application {
       })
     );
 
-    this.app.use(session(this.auth.session()));
+    this.app.use(session(this.cache.init()));
 
     this.app.use(express.json());
     this.app.use(express.urlencoded({ extended: true }));
