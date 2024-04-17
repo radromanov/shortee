@@ -20,9 +20,10 @@ export default class UserModule {
   }
 
   private routes() {
-    this.router.get("/", (req, res) => {
-      res.json({ message: `User ${req.originalUrl} route` });
-    });
+    this.router.get(
+      "/:id",
+      asyncErrorHandler(async (req, res) => this.controller.handleGet(req, res))
+    );
 
     this.router.post(
       "/sign-up",
@@ -35,6 +36,13 @@ export default class UserModule {
       "/login",
       asyncErrorHandler(async (req, res) =>
         this.controller.handleLogin(req, res)
+      )
+    );
+
+    this.router.post(
+      "/logout",
+      asyncErrorHandler(async (req, res) =>
+        this.controller.handleLogout(req, res)
       )
     );
 

@@ -13,8 +13,15 @@ export async function validateAndSetToken(
     //   username: user.username,
     //   email: user.email,
     // });
-    return { success, id: user.id };
+    return {
+      success,
+      user: {
+        id: user.id,
+        username: user.username,
+        email: user.email,
+      },
+    };
   }
 
-  return { success, id: null };
+  return { success, user: null };
 }
