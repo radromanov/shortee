@@ -1,9 +1,10 @@
 import { Navigate, Outlet } from "react-router-dom";
+import { useAuth } from "../utils/hooks/useAuth";
 
 const Unauthorized = () => {
-  const authed = false;
+  const { user } = useAuth();
 
-  return authed ? <Navigate to={"/"} replace /> : <Outlet />;
+  return user?.id ? <Navigate to={"/"} replace /> : <Outlet />;
 };
 
 export default Unauthorized;

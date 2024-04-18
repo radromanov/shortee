@@ -2,14 +2,19 @@ import { compare } from "bcrypt";
 import { eq } from "drizzle-orm";
 import { db } from "../../../db/schema/urls";
 import { users } from "../../../db/schema/users";
-import Exception from "../../core/Exception";
 
 export default class AuthService {
   constructor() {}
 
-  async fetchPass(payload: { email: string }): Promise<string>;
-  async fetchPass(payload: { username: string }): Promise<string>;
-  async fetchPass(payload: { email: string } | { username: string }) {
+  async fetchPass(payload: {
+    email: string;
+  }): Promise<{ success: boolean; hash: string | null }>;
+  async fetchPass(payload: {
+    username: string;
+  }): Promise<{ success: boolean; hash: string | null }>;
+  async fetchPass(
+    payload: { email: string } | { username: string }
+  ): Promise<{ success: boolean; hash: string | null }> {
     let data: { password: string }[] = [];
 
     if ("email" in payload) {
@@ -28,14 +33,13 @@ export default class AuthService {
         .where(eq(users.username, payload.username));
     }
 
+    console.log(data);
+
     if (!data.length || "password"! in data) {
-      throw new Exception(
-        "Something went wrong. Please, try again.",
-        "Internal Server Error"
-      );
+      return { success: false, hash: null };
     }
 
-    return data[0]!.password;
+    return { success: true, hash: data[0]!.password };
   }
 
   async comparePass(plainPass: string, hash: string) {

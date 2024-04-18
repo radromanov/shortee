@@ -26,7 +26,13 @@ export default class AuthController {
     const { email, password } = payload.data;
 
     // Compare passwords
-    const hash = await this.service.fetchPass({ email });
+    const { success, hash } = await this.service.fetchPass({ email });
+    if (!success || !hash) {
+      throw new Exception(
+        "Incorrect email or password. Please, try again.",
+        "Unauthorized"
+      );
+    }
 
     console.log(password, hash);
 

@@ -1,30 +1,17 @@
 import { useState } from "react";
 import Button from "../components/Button";
+import { useAuth } from "../utils/hooks/useAuth";
 
 const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const { login, error } = useAuth();
 
   const handleLogin = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
-    const data = await fetch("http://localhost:3001/api/v1/auth/login", {
-      body: JSON.stringify({
-        email,
-        password,
-      }),
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      mode: "cors",
-      credentials: "include",
-    });
+    await login({ email, password });
 
-    const { user } = await data.json();
-
-    console.log(user);
-    // setAuthedUser(user);
     setEmail("");
     setPassword("");
   };
@@ -63,6 +50,7 @@ const Login = () => {
           </label>
         </div>
 
+        {error ?? <p>{error}</p>}
         <Button value="Log in" variant="default" />
       </form>
       <p>

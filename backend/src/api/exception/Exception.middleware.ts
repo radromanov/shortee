@@ -8,7 +8,7 @@ export default function ExceptionMiddleware(
   _next: NextFunction
 ) {
   if (err instanceof Exception) {
-    return res.status(err.status).json(err.serialize());
+    return res.status(err.status).send(err.serialize());
   }
 
   return res.status(500).json({

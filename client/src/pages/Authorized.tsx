@@ -1,9 +1,10 @@
 import { Outlet } from "react-router-dom";
+import { useAuth } from "../utils/hooks/useAuth";
 
 const Authorized = () => {
-  const authed = false;
+  const { user } = useAuth();
 
-  return authed ? (
+  return user?.id ? (
     <Outlet />
   ) : (
     <main className="flex flex-col w-screen h-screen justify-center items-center">
