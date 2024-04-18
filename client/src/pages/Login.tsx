@@ -5,16 +5,20 @@ import { useAuth } from "../utils/hooks/useAuth";
 const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const { login, error } = useAuth();
+  const { login, error, isLoading, user } = useAuth();
 
   const handleLogin = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
-    await login({ email, password });
+    const success = await login({ email, password });
 
-    setEmail("");
-    setPassword("");
+    if (success) {
+      setEmail("");
+      setPassword("");
+    }
   };
+
+  console.log(user);
 
   return (
     <div>
@@ -30,6 +34,7 @@ const Login = () => {
               name="email"
               id="email"
               type="email"
+              disabled={isLoading}
               required
               autoFocus
             />
@@ -45,13 +50,20 @@ const Login = () => {
               name="password"
               id="password"
               type="password"
+              disabled={isLoading}
               required
             />
           </label>
         </div>
 
-        {error ?? <p>{error}</p>}
-        <Button value="Log in" variant="default" />
+        {error ? (
+          <p>
+            <span className="text-red-500">{error.message}</span>
+          </p>
+        ) : (
+          <></>
+        )}
+        <Button disabled={isLoading} value="Log in" variant="default" />
       </form>
       <p>
         <span>

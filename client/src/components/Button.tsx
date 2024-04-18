@@ -9,7 +9,9 @@ interface Button
 }
 
 const Button = ({ variant, value, className, ...props }: Button) => {
-  let styles = className + " px-3 py-1 rounded-md ";
+  let styles =
+    className +
+    " px-3 py-1 rounded-md disabled:cursor-not-allowed disabled:bg-neutral-700 transition-colors ";
 
   switch (variant) {
     case "warning":

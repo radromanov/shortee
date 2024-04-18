@@ -1,4 +1,4 @@
-import { Outlet } from "react-router-dom";
+import { Link, Outlet } from "react-router-dom";
 import { useAuth } from "../utils/hooks/useAuth";
 
 const Authorized = () => {
@@ -12,13 +12,13 @@ const Authorized = () => {
       <p className="text-xl">
         <span>
           Please,{" "}
-          <a className="underline text-violet-300" href="/login">
-            log in
-          </a>{" "}
+          <Link to="/login">
+            <span className="underline text-violet-300">log in</span>
+          </Link>{" "}
           or{" "}
-          <a className="underline text-violet-300" href="/sign-up">
-            create an account
-          </a>
+          <Link to="/sign-up">
+            <span className="underline text-violet-300">create an account</span>
+          </Link>
           .
         </span>
       </p>

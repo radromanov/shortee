@@ -1,23 +1,16 @@
 import { createContext } from "react";
 import useProvideAuth from "../hooks/useProvideAuth";
+import { User, UserLoginInfo } from "../types/User.type";
+import { Exception } from "../types/Error.type";
 
 interface AuthContext {
-  login: (
-    payload: { email: string; password: string },
-    url?: string
-  ) => Promise<boolean>;
+  login: (payload: UserLoginInfo, url?: string) => Promise<boolean>;
   isLoading: boolean;
   setIsLoading: React.Dispatch<React.SetStateAction<boolean>>;
-  user: { id: string; email: string; username: string } | null;
-  setUser: React.Dispatch<
-    React.SetStateAction<{
-      id: string;
-      email: string;
-      username: string;
-    } | null>
-  >;
-  error: string | null;
-  setError: React.Dispatch<string | null>;
+  user: User | null;
+  setUser: React.Dispatch<React.SetStateAction<User | null>>;
+  error: Exception | null;
+  setError: React.Dispatch<React.SetStateAction<Exception | null>>;
 }
 
 export const AuthContext = createContext<AuthContext>({} as AuthContext);
