@@ -21,9 +21,7 @@ export default class AuthModule {
   }
 
   private routes() {
-    this.router.get("/", isAuthed, (_req, res) => {
-      res.status(200).json({ authed: true });
-    });
+    this.router.get("/", isAuthed);
 
     this.router.post(
       "/login",

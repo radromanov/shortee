@@ -1,10 +1,21 @@
 import { Link, Outlet } from "react-router-dom";
 import { useAuth } from "../utils/hooks/useAuth";
+import { PuffLoader } from "react-spinners";
+import { useSession } from "../utils/hooks/useSession";
 
 const Authorized = () => {
-  const { user } = useAuth();
+  const { isLoading } = useAuth();
+  const authed = useSession();
 
-  return user?.id ? (
+  if (isLoading) {
+    return (
+      <div className="flex flex-col w-screen h-screen justify-center items-center">
+        <PuffLoader color="#ce36d6" speedMultiplier={0.5} />
+      </div>
+    );
+  }
+
+  return authed?.id ? (
     <Outlet />
   ) : (
     <main className="flex flex-col w-screen h-screen justify-center items-center">

@@ -5,7 +5,7 @@ import { useAuth } from "../utils/hooks/useAuth";
 const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const { login, error, isLoading, user } = useAuth();
+  const { login, error, isLoading } = useAuth();
 
   const handleLogin = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -17,8 +17,6 @@ const Login = () => {
       setPassword("");
     }
   };
-
-  console.log(user);
 
   return (
     <div>

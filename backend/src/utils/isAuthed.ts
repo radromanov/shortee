@@ -7,20 +7,19 @@ export const isAuthed = async (
 ) => {
   let authed = false;
 
-  await req.sessionStore.get(`sid ${req.sessionID}`, (err, session) => {
+  await req.sessionStore.get(req.sessionID, (err, session) => {
     if (err) return next(err);
-
-    console.log("SESSION FROM STORE", session);
 
     if (!session) authed = false;
     else authed = true;
   });
 
-  console.log(authed);
-
   if (!authed) {
-    return res.status(401).json({ authed });
+    return res.status(401).send({ message: "Unauthorized", status: 401 });
   } else {
-    return next();
+    //@ts-ignore
+    console.log(req.session.user);
+    //@ts-ignore
+    return res.status(200).send(req.session.user);
   }
 };

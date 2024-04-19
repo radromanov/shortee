@@ -11,6 +11,7 @@ interface AuthContext {
   setUser: React.Dispatch<React.SetStateAction<User | null>>;
   error: Exception | null;
   setError: React.Dispatch<React.SetStateAction<Exception | null>>;
+  isAuthed(url?: string): Promise<void>;
 }
 
 export const AuthContext = createContext<AuthContext>({} as AuthContext);
