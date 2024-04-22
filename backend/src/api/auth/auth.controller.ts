@@ -13,6 +13,30 @@ export default class AuthController {
     private readonly auth: Auth = new Auth()
   ) {}
 
+  async handleSession(req: Request, res: Response) {
+    // @ts-ignore
+    if (!req.authed) {
+      throw new Exception(
+        "You need to log in to view the page's contents.",
+        "Unauthorized"
+      );
+    }
+
+    // @ts-ignore
+    return res.status(200).send(req.session.user);
+  }
+
+  async handleLogout(req: Request, res: Response) {
+    this.auth.logout(req.sessionID);
+    //@ts-ignore
+    req.authed = false;
+
+    return res
+      .status(200)
+      .clearCookie("connect.sid")
+      .send({ message: "Successfully logged out." });
+  }
+
   async handleLogin(req: Request, res: Response) {
     // Ensure payload integrity
     const payload = UserLoginSchema.safeParse(req.body);
@@ -33,8 +57,6 @@ export default class AuthController {
         "Unauthorized"
       );
     }
-
-    console.log(password, hash);
 
     if (!(await this.service.comparePass(password, hash))) {
       throw new Exception(

@@ -8,7 +8,6 @@ import NotFoundMiddleware from "../api/exception/NotFound.middleware";
 import ExceptionMiddleware from "../api/exception/Exception.middleware";
 import Config from "./Config";
 import ShortURLModule from "../api/short-url/shortUrl.module";
-import Auth from "../api/auth/Auth";
 import Cache from "./Cache";
 import AuthModule from "../api/auth/auth.module";
 
@@ -18,8 +17,7 @@ export default class Application {
   constructor(
     private readonly app: Express,
     private readonly config: Config = new Config(),
-    private readonly cache: Cache = new Cache(),
-    private readonly auth: Auth = new Auth()
+    private readonly cache: Cache = new Cache()
   ) {
     this.router = Router();
   }

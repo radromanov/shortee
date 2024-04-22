@@ -5,6 +5,7 @@ import { Exception } from "../types/Error.type";
 
 interface AuthContext {
   login: (payload: UserLoginInfo, url?: string) => Promise<boolean>;
+  logout: (url?: string) => Promise<boolean>;
   isLoading: boolean;
   setIsLoading: React.Dispatch<React.SetStateAction<boolean>>;
   user: User | null;

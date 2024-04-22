@@ -36,6 +36,33 @@ export default function useProvideAuth() {
     return true;
   }
 
+  async function logout(
+    url: string = "http://localhost:3001/api/v1/auth/logout"
+  ) {
+    setIsLoading(true);
+    setError(null);
+
+    const response = await fetch(url, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      credentials: "include",
+      mode: "cors",
+    });
+
+    const data = await response.json();
+    setIsLoading(false);
+
+    if (!response.ok) {
+      setError({ message: data.message, status: data.status });
+      return false;
+    }
+
+    setUser(null);
+    return true;
+  }
+
   async function isAuthed(url: string = "http://localhost:3001/api/v1/auth") {
     setIsLoading(true);
     setError(null);
@@ -67,6 +94,7 @@ export default function useProvideAuth() {
     error,
     setError,
     login,
+    logout,
     isAuthed,
   };
 }

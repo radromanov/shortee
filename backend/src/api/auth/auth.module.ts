@@ -21,12 +21,26 @@ export default class AuthModule {
   }
 
   private routes() {
-    this.router.get("/", isAuthed);
+    this.router.get(
+      "/",
+      isAuthed,
+      asyncErrorHandler(async (req, res) =>
+        this.controller.handleSession(req, res)
+      )
+    );
 
     this.router.post(
       "/login",
       asyncErrorHandler(async (req, res) =>
         this.controller.handleLogin(req, res)
+      )
+    );
+
+    this.router.get(
+      "/logout",
+      isAuthed,
+      asyncErrorHandler(async (req, res) =>
+        this.controller.handleLogout(req, res)
       )
     );
 
