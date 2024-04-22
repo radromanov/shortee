@@ -10,12 +10,12 @@ const DB_URI = new Config().getOne("DB_URI");
 
 export const urls = pgTable("urls", {
   id: varchar("id").primaryKey(),
-  ownerId: varchar("ownerId", { length: 16 }),
+  ownerId: varchar("owner_id", { length: 16 }).references(() => users.id),
   name: varchar("name", { length: 256 }).notNull(),
   original: varchar("original").notNull(),
   short: varchar("short").notNull(),
-  createdAt: timestamp("createdAt").defaultNow().notNull(),
-  updatedAt: timestamp("updatedAt").defaultNow().notNull(),
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+  updatedAt: timestamp("updated_at").defaultNow().notNull(),
 });
 
 export const urlsRelations = relations(urls, ({ one }) => ({

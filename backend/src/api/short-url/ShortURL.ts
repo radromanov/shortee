@@ -46,7 +46,7 @@ export default class ShortURL {
         ? `http://localhost:${PORT}/${id}`
         : `https://${DOMAIN}/${id}`;
 
-    return await db
+    const shortUrl = await db
       .insert(urls)
       .values({
         name,
@@ -56,6 +56,8 @@ export default class ShortURL {
         ownerId,
       })
       .returning();
+
+    return shortUrl;
   }
 
   async getOne(id: string) {
