@@ -9,7 +9,13 @@ export const isAuthed = async (
   let authed = false;
 
   await req.sessionStore.get(req.sessionID, (err, session) => {
-    if (err) return next(err);
+    if (err)
+      return next(
+        new Exception(
+          "You need to log in to view the page's contents.",
+          "Unauthorized"
+        )
+      );
 
     //@ts-ignore
     if (!session.user) authed = false;

@@ -1,5 +1,5 @@
 import { Express, Router } from "express";
-import { asyncErrorHandler } from "../../utils";
+import { asyncErrorHandler, isAuthed } from "../../utils";
 import Auth from "../auth/Auth";
 
 export default class ShortURLModule {
@@ -22,15 +22,13 @@ export default class ShortURLModule {
   private routes() {
     this.router.post(
       "/",
-      async (req, res, next) => {
-        console.log(res.getHeaders());
-        console.log(req.headers);
-        next();
-      },
+      asyncErrorHandler(isAuthed),
       asyncErrorHandler(async (req, res) => {
         const payload = req.body;
 
-        res.status(201).json(payload);
+        console.log(payload);
+
+        res.status(201).send(payload);
       })
     );
 
