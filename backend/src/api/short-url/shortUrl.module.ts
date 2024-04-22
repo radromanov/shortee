@@ -1,6 +1,6 @@
 import { Express, Router } from "express";
 import { asyncErrorHandler, isAuthed } from "../../utils";
-import Auth from "../auth/Auth";
+import ShortURLController from "./shortUrl.controller";
 
 export default class ShortURLModule {
   private readonly PREFIX = "/short-url";
@@ -8,7 +8,7 @@ export default class ShortURLModule {
 
   constructor(
     private readonly app: Express,
-    private readonly auth: Auth = new Auth()
+    private readonly controller: ShortURLController = new ShortURLController()
   ) {
     this.router = Router();
   }
@@ -23,13 +23,9 @@ export default class ShortURLModule {
     this.router.post(
       "/",
       asyncErrorHandler(isAuthed),
-      asyncErrorHandler(async (req, res) => {
-        const payload = req.body;
-
-        console.log(payload);
-
-        res.status(201).send(payload);
-      })
+      asyncErrorHandler(
+        async (req, res) => await this.controller.handleCreate(req, res)
+      )
     );
 
     this.app.use(this.PREFIX, this.router);

@@ -14,7 +14,7 @@ const AddLink = ({ setShowModal }: Props) => {
 
     return await fetch("http://localhost:3001/api/v1/short-url", {
       method: "POST",
-      body: JSON.stringify({ url, name }),
+      body: JSON.stringify({ original: url, name }),
       headers: {
         "Content-Type": "application/json",
       },
