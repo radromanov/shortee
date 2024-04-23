@@ -1,5 +1,4 @@
 import { useState } from "react";
-import { useSignup } from "../utils/hooks/useSignup";
 import Button from "../components/Button";
 import Input from "../components/Input";
 import {
@@ -10,6 +9,7 @@ import {
   UsernameSchema,
 } from "../utils/types/User.type";
 import { PuffLoader } from "react-spinners";
+import { useAuth } from "../utils/hooks/useAuth";
 
 const SignUp = () => {
   const [formData, setFormData] = useState<UserInfoPayload>({
@@ -18,11 +18,11 @@ const SignUp = () => {
     password: "",
     username: "",
   });
-  const { data, signup } = useSignup();
+
+  const { data, signup } = useAuth();
 
   const handleSignup = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-
     await signup(formData);
   };
 

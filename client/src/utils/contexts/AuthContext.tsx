@@ -1,17 +1,20 @@
 import { createContext } from "react";
 import useProvideAuth from "../hooks/useProvideAuth";
-import { User, UserLoginInfo } from "../types/User.type";
-import { Exception } from "../types/Error.type";
+import {
+  UserInfoPayload,
+  UserLoginPayload,
+  UserSession,
+} from "../types/User.type";
+import { State } from "../hooks/useFetch";
 
 interface AuthContext {
-  login: (payload: UserLoginInfo, url?: string) => Promise<boolean>;
-  logout: (url?: string) => Promise<boolean>;
-  isLoading: boolean;
-  setIsLoading: React.Dispatch<React.SetStateAction<boolean>>;
-  user: User | null;
-  setUser: React.Dispatch<React.SetStateAction<User | null>>;
-  error: Exception | null;
-  setError: React.Dispatch<React.SetStateAction<Exception | null>>;
+  login: (payload: UserLoginPayload) => Promise<State<UserSession>>;
+  logout: () => Promise<State<UserSession>>;
+  signup: (payload: UserInfoPayload) => Promise<State<UserSession>>;
+
+  data: State<UserSession>;
+  user: UserSession | null;
+  setUser: React.Dispatch<React.SetStateAction<UserSession | null>>;
   isAuthed(url?: string): Promise<void>;
 }
 
