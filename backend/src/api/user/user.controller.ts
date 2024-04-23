@@ -18,7 +18,14 @@ export default class UserController {
       );
     }
 
-    const user = await this.service.insertOne(payload.data);
+    const [user] = await this.service.insertOne(payload.data);
+
+    if (!user) {
+      throw new Exception(
+        "Something went wrong. Please, try again.",
+        "Internal Server Error"
+      );
+    }
 
     res.status(201).send(user);
   }

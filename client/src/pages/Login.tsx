@@ -61,7 +61,7 @@ const Login = () => {
         ) : (
           <></>
         )}
-        <Button disabled={isLoading} value="Log in" variant="default" />
+        <Button disabled={isLoading} text="Log in" variant="default" />
       </form>
       <p>
         <span>

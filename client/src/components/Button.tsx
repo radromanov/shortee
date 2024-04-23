@@ -3,12 +3,12 @@ interface Button
     React.ButtonHTMLAttributes<HTMLButtonElement>,
     HTMLButtonElement
   > {
-  value: string;
+  text: string | JSX.Element;
   variant: "default" | "warning";
   className?: string;
 }
 
-const Button = ({ variant, value, className, ...props }: Button) => {
+const Button = ({ variant, text, className, ...props }: Button) => {
   let styles =
     className +
     " px-3 py-1 rounded-md disabled:cursor-not-allowed disabled:bg-neutral-700 transition-colors ";
@@ -24,7 +24,7 @@ const Button = ({ variant, value, className, ...props }: Button) => {
 
   return (
     <button className={styles} {...props}>
-      {value}
+      {text}
     </button>
   );
 };

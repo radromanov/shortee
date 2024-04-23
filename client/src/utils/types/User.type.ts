@@ -34,7 +34,7 @@ export const PasswordSchema = z
     PASSWORD_MAX_LEN,
     `Please enter a password between ${PASSWORD_MIN_LEN} and ${PASSWORD_MAX_LEN} characters.`
   );
-export const ConfirmSchema = z
+export const ConfirmPasswordSchema = z
   .string({
     required_error: "Confirm Password field is required.",
   })
@@ -51,7 +51,7 @@ export const UserInfoSchema = z.object({
   username: UsernameSchema,
   email: EmailSchema,
   password: PasswordSchema,
-  confirm: ConfirmSchema,
+  confirmPassword: ConfirmPasswordSchema,
 });
 export const UserPayload = z.object({
   username: UsernameSchema,

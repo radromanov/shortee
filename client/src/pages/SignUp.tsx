@@ -1,15 +1,19 @@
 import { useState } from "react";
 import { useSignup } from "../utils/hooks/useSignup";
 import Button from "../components/Button";
+import Input from "../components/Input";
+import {
+  ConfirmPasswordSchema,
+  EmailSchema,
+  PasswordSchema,
+  UserInfoPayload,
+  UsernameSchema,
+} from "../utils/types/User.type";
+import { PuffLoader } from "react-spinners";
 
 const SignUp = () => {
-  const [formData, setFormData] = useState<{
-    email: string;
-    username: string;
-    password: string;
-    confirm: string;
-  }>({
-    confirm: "",
+  const [formData, setFormData] = useState<UserInfoPayload>({
+    confirmPassword: "",
     email: "",
     password: "",
     username: "",
@@ -29,100 +33,80 @@ const SignUp = () => {
     });
   };
 
-  console.log(data, formData);
+  console.log(data);
 
   return (
-    <div>
-      <form id="signup-form" onSubmit={handleSignup}>
-        <label htmlFor="email">
-          <p>
-            <span>Email</span>
-          </p>
-          <input
-            disabled={data.status === "loading"}
-            className={`${
-              data.status === "loading"
-                ? "cursor-not-allowed hover:bg-neutral-800"
-                : "hover:bg-neutral-700"
-            }`}
-            name="email"
+    <div className="flex flex-col gap-2 justify-center items-center w-screen h-screen">
+      <form
+        className="flex flex-col w-2/5 gap-2"
+        id="signup-form"
+        onSubmit={handleSignup}
+      >
+        <div className="flex flex-col gap-2">
+          <Input
+            text="email"
+            type="email"
             value={formData.email}
             onChange={handleInput}
-            required
-            autoFocus
-          />
-        </label>
-
-        <label htmlFor="username">
-          <p>
-            <span>Username</span>
-          </p>
-          <input
             disabled={data.status === "loading"}
-            className={`${
-              data.status === "loading"
-                ? "cursor-not-allowed hover:bg-neutral-800"
-                : "hover:bg-neutral-700"
-            }`}
-            name="username"
+            autoFocus={true}
+            schema={EmailSchema}
+          />
+
+          <Input
+            text="username"
+            type="text"
             value={formData.username}
             onChange={handleInput}
-            required
-          />
-        </label>
-
-        <label htmlFor="password">
-          <p>
-            <span>Password</span>
-          </p>
-          <input
             disabled={data.status === "loading"}
-            className={`${
-              data.status === "loading"
-                ? "cursor-not-allowed hover:bg-neutral-800"
-                : "hover:bg-neutral-700"
-            }`}
-            name="password"
+            schema={UsernameSchema}
+          />
+
+          <Input
+            text="password"
             type="password"
             value={formData.password}
             onChange={handleInput}
-            required
-          />
-        </label>
-
-        <label htmlFor="confirm">
-          <p>
-            <span>Confirm Password</span>
-          </p>
-          <input
             disabled={data.status === "loading"}
-            className={`${
-              data.status === "loading"
-                ? "cursor-not-allowed hover:bg-neutral-800"
-                : "hover:bg-neutral-700"
-            }`}
-            name="confirm"
-            type="password"
-            value={formData.confirm}
-            onChange={handleInput}
-            required
+            schema={PasswordSchema}
           />
-        </label>
 
-        <Button
-          disabled={data.status === "loading"}
-          className={`${data.status === "loading" ? "cursor-not-allowed" : ""}`}
-          value="Sign up"
-          variant="default"
-        />
+          <Input
+            text="confirm password"
+            type="password"
+            value={formData.confirmPassword}
+            onChange={handleInput}
+            disabled={data.status === "loading"}
+            schema={ConfirmPasswordSchema}
+          />
+        </div>
+
+        <div className="flex flex-col gap-2 items-center w-full">
+          {data.error?.message ? (
+            <p>
+              <span className="text-red-400">{data.error.message}</span>
+            </p>
+          ) : (
+            <></>
+          )}
+          <Button
+            disabled={data.status === "loading"}
+            className={`w-full ${
+              data.status === "loading" ? "cursor-not-allowed" : ""
+            }`}
+            text={
+              data.status === "loading" ? (
+                <div className="flex justify-center items-center">
+                  <PuffLoader size={24} color="white" speedMultiplier={0.5} />
+                </div>
+              ) : (
+                "Sign up"
+              )
+            }
+            variant="default"
+          />
+        </div>
       </form>
-      {data.error?.message ? (
-        <p>
-          <span>{data.error.message}</span>
-        </p>
-      ) : (
-        <></>
-      )}
       <p>
         Already have an account?{" "}
         <a className="underline text-violet-300" href="/login">

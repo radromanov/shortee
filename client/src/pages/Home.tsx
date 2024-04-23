@@ -17,11 +17,11 @@ const Home = () => {
       )}
 
       <Button
-        value="Add link"
+        text="Add link"
         variant="default"
         onClick={() => setShowModal(true)}
       />
-      <Button value="Log out" variant="default" onClick={() => logout()} />
+      <Button text="Log out" variant="default" onClick={() => logout()} />
     </div>
   );
 };
