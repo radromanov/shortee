@@ -5,43 +5,67 @@ const USERNAME_MAX_LEN = 32;
 const PASSWORD_MIN_LEN = 8;
 const PASSWORD_MAX_LEN = 32;
 
-const username = z
+export const EmailSchema = z
   .string({
-    required_error: `Please enter a username between ${USERNAME_MIN_LEN} and ${USERNAME_MAX_LEN} characters..`,
+    required_error: "Email field is required.",
   })
-  .min(USERNAME_MIN_LEN)
-  .max(USERNAME_MAX_LEN);
-const password = z
+  .email({ message: "Please enter a valid email." });
+export const UsernameSchema = z
   .string({
-    required_error: `Please enter a password between ${PASSWORD_MIN_LEN} and ${PASSWORD_MAX_LEN} characters.`,
+    required_error: "Username field is required.",
   })
-  .min(PASSWORD_MIN_LEN)
-  .max(PASSWORD_MAX_LEN);
-const email = z
+  .min(
+    USERNAME_MIN_LEN,
+    `Please enter a username between ${USERNAME_MIN_LEN} and ${USERNAME_MAX_LEN} characters.`
+  )
+  .max(
+    USERNAME_MAX_LEN,
+    `Please enter a username between ${USERNAME_MIN_LEN} and ${USERNAME_MAX_LEN} characters.`
+  );
+export const PasswordSchema = z
   .string({
-    required_error: "Please enter a valid email.",
+    required_error: "Password field is required.",
   })
-  .email();
+  .min(
+    PASSWORD_MIN_LEN,
+    `Please enter a password between ${PASSWORD_MIN_LEN} and ${PASSWORD_MAX_LEN} characters.`
+  )
+  .max(
+    PASSWORD_MAX_LEN,
+    `Please enter a password between ${PASSWORD_MIN_LEN} and ${PASSWORD_MAX_LEN} characters.`
+  );
+export const ConfirmSchema = z
+  .string({
+    required_error: "Confirm Password field is required.",
+  })
+  .min(
+    PASSWORD_MIN_LEN,
+    `Please enter a password between ${PASSWORD_MIN_LEN} and ${PASSWORD_MAX_LEN} characters.`
+  )
+  .max(
+    PASSWORD_MAX_LEN,
+    `Please enter a password between ${PASSWORD_MIN_LEN} and ${PASSWORD_MAX_LEN} characters.`
+  );
 
 export const UserInfoSchema = z.object({
-  username,
-  email,
-  password,
-  confirmPassword: z.string(),
+  username: UsernameSchema,
+  email: EmailSchema,
+  password: PasswordSchema,
+  confirm: ConfirmSchema,
 });
 export const UserPayload = z.object({
-  username,
-  email,
-  password,
+  username: UsernameSchema,
+  email: EmailSchema,
+  password: PasswordSchema,
 });
 export const UserLoginSchema = z.object({
-  email,
-  password,
+  email: EmailSchema,
+  password: PasswordSchema,
 });
 export const UserSessionSchema = z.object({
   id: z.string(),
-  username,
-  email,
+  username: UsernameSchema,
+  email: EmailSchema,
 });
 
 export type UserInfoPayload = z.infer<typeof UserInfoSchema>;

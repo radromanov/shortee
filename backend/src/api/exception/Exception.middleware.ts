@@ -11,7 +11,7 @@ export default function ExceptionMiddleware(
     return res.status(err.status).send(err.serialize());
   }
 
-  return res.status(500).json({
+  return res.status(500).send({
     message: err.message || "Something went wrong",
     status: 500,
     exception: "Internal Server Error",
