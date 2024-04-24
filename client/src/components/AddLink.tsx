@@ -6,21 +6,30 @@ interface Props {
 }
 
 const AddLink = ({ setShowModal }: Props) => {
-  const [url, setURL] = useState("");
-  const [name, setName] = useState("");
+  const [formData, setFormData] = useState<{ url: string; name: string }>({
+    name: "",
+    url: "",
+  });
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
     return await fetch("http://localhost:3001/api/v1/short-url", {
       method: "POST",
-      body: JSON.stringify({ original: url, name }),
+      body: JSON.stringify(formData),
       headers: {
         "Content-Type": "application/json",
       },
       mode: "cors",
       credentials: "include",
     });
+  };
+
+  const handleInput = (e: React.ChangeEvent<HTMLInputElement>) => {
+    return setFormData((prev) => ({
+      ...prev,
+      [e.target.name]: e.target.value,
+    }));
   };
 
   return (
@@ -33,8 +42,8 @@ const AddLink = ({ setShowModal }: Props) => {
           <input
             id="url"
             name="url"
-            value={url}
-            onChange={(e) => setURL(e.target.value)}
+            value={formData.url}
+            onChange={handleInput}
           />
         </label>
         <label htmlFor="name">
@@ -44,13 +53,13 @@ const AddLink = ({ setShowModal }: Props) => {
           <input
             id="name"
             name="name"
-            value={name}
-            onChange={(e) => setName(e.target.value)}
+            value={formData.name}
+            onChange={handleInput}
           />
         </label>
-        <Button value="Add" variant="default" />
+        <Button text="Add" variant="default" />
         <Button
-          value="Close"
+          text="Close"
           variant="warning"
           onClick={() => setShowModal(false)}
         />

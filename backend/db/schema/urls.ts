@@ -12,7 +12,7 @@ export const urls = pgTable("urls", {
   id: varchar("id").primaryKey(),
   ownerId: varchar("owner_id", { length: 16 }).references(() => users.id),
   name: varchar("name", { length: 256 }).notNull(),
-  original: varchar("original").notNull(),
+  url: varchar("url").notNull(),
   short: varchar("short").notNull(),
   createdAt: timestamp("created_at").defaultNow().notNull(),
   updatedAt: timestamp("updated_at").defaultNow().notNull(),

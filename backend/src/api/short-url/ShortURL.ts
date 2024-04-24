@@ -10,13 +10,13 @@ export const ShortURLSchema = z.object({
   id: z.string().min(1),
   ownerId: z.string().min(1),
   name: z.string().min(1),
-  original: z.string().url(),
+  url: z.string().url(),
   short: z.string().url(),
 });
 
 const URLPayloadSchema = z.object({
   name: z.string().min(1),
-  original: z.string().min(1),
+  url: z.string().min(1),
   ownerId: z.string().min(1),
 });
 type URLPayload = z.infer<typeof URLPayloadSchema>;
@@ -38,7 +38,7 @@ export default class ShortURL {
     }
 
     const { PORT, NODE_ENV, DOMAIN } = this.config.get();
-    const { name, original, ownerId } = parsedPayload.data;
+    const { name, url, ownerId } = parsedPayload.data;
 
     const id = await this.idManager.insertOne();
     const short =
@@ -50,7 +50,7 @@ export default class ShortURL {
       .insert(urls)
       .values({
         name,
-        original,
+        url,
         short,
         id,
         ownerId,

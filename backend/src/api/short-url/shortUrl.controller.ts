@@ -11,10 +11,12 @@ export default class ShortURLController {
 
     const short = await this.service.create({
       name: payload.name,
-      original: payload.original,
+      url: payload.url,
       // @ts-ignore
       ownerId: req.session.user.id,
     });
+
+    console.log(short[0]);
 
     res.status(201).send(short[0]);
   }
