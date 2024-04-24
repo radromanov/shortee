@@ -28,8 +28,12 @@ export default class ShortURLModule {
           async (req, res) => await this.controller.handleCreate(req, res)
         )
       )
-      .get("/", asyncErrorHandler(isAuthed), (_req, res) =>
-        res.status(200).send({ urls: ["urls", "go", "here"] })
+      .get(
+        "/",
+        asyncErrorHandler(isAuthed),
+        asyncErrorHandler(
+          async (req, res) => await this.controller.handleGetAll(req, res)
+        )
       );
 
     this.app.use(this.PREFIX, this.router);

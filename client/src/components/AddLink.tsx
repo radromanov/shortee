@@ -57,7 +57,11 @@ const AddLink = ({ setShowModal }: Props) => {
             onChange={handleInput}
           />
         </label>
-        <Button text="Add" variant="default" />
+        <Button
+          text="Add"
+          variant="default"
+          onSubmit={() => setShowModal(false)}
+        />
         <Button
           text="Close"
           variant="warning"

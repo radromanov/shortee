@@ -12,6 +12,8 @@ export const ShortURLSchema = z.object({
   name: z.string().min(1),
   url: z.string().url(),
   short: z.string().url(),
+  createdAt: z.date(),
+  updatedAt: z.date(),
 });
 
 const URLPayloadSchema = z.object({
@@ -62,6 +64,9 @@ export default class ShortURL {
 
   async getOne(id: string) {
     return db.select().from(urls).where(eq(urls.id, id));
+  }
+  async getAll(ownerId: string) {
+    return await db.select().from(urls).where(eq(urls.ownerId, ownerId));
   }
 
   async deleteOne(id: string) {

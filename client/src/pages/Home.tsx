@@ -4,10 +4,11 @@ import { useAuth } from "../utils/hooks/useAuth";
 import AddLinkModal from "../modals/AddLinkModal";
 import AddLink from "../components/AddLink";
 import { useFetch } from "../utils/hooks/useFetch";
+import { ShortURL } from "../utils/types/Url.type";
 
 const Home = () => {
   const { logout, user } = useAuth();
-  const { fetchGet, data } = useFetch<{ urls: string[] }>();
+  const { fetchGet, data } = useFetch<ShortURL[]>();
   const [showModal, setShowModal] = useState(false);
 
   useEffect(() => {
@@ -18,6 +19,7 @@ const Home = () => {
     handleFetch();
   }, []);
 
+  console.log(data);
   return (
     <>
       <h1 className="text-2xl">Hi, {user?.username}</h1>
@@ -29,8 +31,8 @@ const Home = () => {
         )}
 
         <ul>
-          {data.content?.urls.map((url, i) => (
-            <li key={i}>{url}</li>
+          {data.content?.map((url, i) => (
+            <li key={i}>{url.name}</li>
           ))}
         </ul>
 

@@ -6,6 +6,15 @@ export default class ShortURLController {
     private readonly service: ShortURLService = new ShortURLService()
   ) {}
 
+  async handleGetAll(req: Request, res: Response) {
+    //@ts-ignore
+    const urls = await this.service.getAll(req.session.user.id);
+
+    console.log(urls);
+
+    res.status(200).send(urls);
+  }
+
   async handleCreate(req: Request, res: Response) {
     const payload = req.body;
 
