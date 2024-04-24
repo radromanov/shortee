@@ -1,21 +1,29 @@
-import { useState } from "react";
+import React, { useState } from "react";
 import Button from "../components/Button";
 import { useAuth } from "../utils/hooks/useAuth";
+import LoadingScreen from "../components/LoadingScreen";
 
 const Login = () => {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
+  const [formData, setFormData] = useState<{ email: string; password: string }>(
+    { email: "", password: "" }
+  );
   const { login, isLoading, error } = useAuth();
 
   const handleLogin = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
-    const success = await login({ email, password });
+    const success = await login(formData);
 
     if (success) {
-      setEmail("");
-      setPassword("");
+      setFormData({ email: "", password: "" });
     }
+  };
+
+  const handleInput = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setFormData((prev) => ({
+      ...prev,
+      [e.target.name]: e.target.value,
+    }));
   };
 
   return (
@@ -27,8 +35,8 @@ const Login = () => {
               <span>Email</span>
             </p>
             <input
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
+              value={formData.email}
+              onChange={handleInput}
               name="email"
               id="email"
               type="email"
@@ -43,8 +51,8 @@ const Login = () => {
               <span>Password</span>
             </p>
             <input
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
+              value={formData.password}
+              onChange={handleInput}
               name="password"
               id="password"
               type="password"
@@ -54,13 +62,14 @@ const Login = () => {
           </label>
         </div>
 
-        {error?.message ? (
+        {error?.message && (
           <p>
             <span className="text-red-500">{error.message}</span>
           </p>
-        ) : (
-          <></>
         )}
+
+        {isLoading === "loading" && <LoadingScreen />}
+
         <Button
           disabled={isLoading === "loading"}
           text="Log in"

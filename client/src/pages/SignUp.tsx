@@ -23,8 +23,11 @@ const SignUp = () => {
 
   const handleSignup = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    await signup(formData);
-    await login({ email: formData.email, password: formData.password });
+    const success = await signup(formData);
+
+    if (success) {
+      await login({ email: formData.email, password: formData.password });
+    }
   };
 
   const handleInput = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -81,12 +84,10 @@ const SignUp = () => {
         </div>
 
         <div className="flex flex-col gap-2 items-center w-full">
-          {error?.message ? (
+          {error?.message && (
             <p>
               <span className="text-red-400">{error.message}</span>
             </p>
-          ) : (
-            <></>
           )}
           <Button
             disabled={isLoading === "loading"}
