@@ -14,7 +14,7 @@ export interface State<R> {
   status: Status;
 }
 
-let fetchOpts: RequestInit = {
+const defaultFetchOpts: RequestInit = {
   method: "GET",
   credentials: "include",
   mode: "cors",
@@ -54,17 +54,11 @@ export const useFetch = <C>() => {
     schema?: z.ZodSchema<C>;
     method: HTTPMethod;
   }) => {
-    if (method !== "GET") {
-      fetchOpts = {
-        ...fetchOpts,
-        method,
-      };
-    } else {
-      fetchOpts = {
-        ...fetchOpts,
-        method: "GET",
-      };
-    }
+    const fetchOpts = {
+      ...defaultFetchOpts,
+      method,
+      body: payload ? JSON.stringify(payload) : undefined,
+    };
 
     setData((prev) => ({
       ...prev,
@@ -74,11 +68,7 @@ export const useFetch = <C>() => {
     }));
 
     try {
-      const response = await fetch(url, {
-        ...fetchOpts,
-        body: payload ? JSON.stringify(payload) : undefined,
-      });
-
+      const response = await fetch(url, fetchOpts);
       const responseData = await response.json();
 
       if ("exception" in responseData) {
@@ -97,19 +87,17 @@ export const useFetch = <C>() => {
           };
         }
 
-        setData((prev) => ({
-          ...prev,
+        setData({
           content: content.data,
           error: null,
           status: "success",
-        }));
+        });
       } else {
-        setData((prev) => ({
-          ...prev,
+        setData({
           content: responseData,
           error: null,
           status: "success",
-        }));
+        });
       }
     } catch (e) {
       const error = e as {
@@ -119,12 +107,11 @@ export const useFetch = <C>() => {
         status: number;
       };
 
-      setData((prev) => ({
-        ...prev,
+      setData({
         content: null,
         status: "fail",
         error,
-      }));
+      });
     }
   };
 
