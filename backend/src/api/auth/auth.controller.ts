@@ -89,12 +89,9 @@ export default class AuthController {
     });
 
     res.status(200).send({
-      success: true,
-      user: {
-        id: user[0]!.id,
-        username: user[0]!.username,
-        email: user[0]!.email,
-      },
+      id: user[0]!.id,
+      username: user[0]!.username,
+      email: user[0]!.email,
     });
   }
 }

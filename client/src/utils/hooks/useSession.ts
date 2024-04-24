@@ -2,12 +2,21 @@ import { useEffect } from "react";
 import { useAuth } from "./useAuth";
 
 export function useSession() {
-  const { user, isAuthed } = useAuth();
+  const { data, isAuthed, setUser } = useAuth();
 
   useEffect(() => {
-    const fetchIsAuthed = async () => await isAuthed();
-    fetchIsAuthed();
+    const updateAuthStatus = async () => {
+      await isAuthed();
+
+      if (data.content?.id) {
+        setUser(data.content);
+      } else {
+        setUser(null);
+      }
+    };
+
+    updateAuthStatus();
   }, []);
 
-  return user;
+  return data;
 }

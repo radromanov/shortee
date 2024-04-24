@@ -19,11 +19,12 @@ const SignUp = () => {
     username: "",
   });
 
-  const { data, signup } = useAuth();
+  const { data, signup, login } = useAuth();
 
   const handleSignup = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     await signup(formData);
+    await login({ email: formData.email, password: formData.password });
   };
 
   const handleInput = (e: React.ChangeEvent<HTMLInputElement>) => {

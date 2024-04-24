@@ -15,7 +15,7 @@ interface AuthContext {
   data: State<UserSession>;
   user: UserSession | null;
   setUser: React.Dispatch<React.SetStateAction<UserSession | null>>;
-  isAuthed(url?: string): Promise<void>;
+  isAuthed(): Promise<void>;
 }
 
 export const AuthContext = createContext<AuthContext>({} as AuthContext);

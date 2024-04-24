@@ -8,7 +8,7 @@ import {
 import { useFetch } from "./useFetch";
 
 export default function useProvideAuth() {
-  const { data, fetchLogin, fetchSignup, fetchLogout, fetchGet } =
+  const { data, fetchLogin, fetchSignup, fetchLogout, fetchSession } =
     useFetch<UserSession>();
   const [user, setUser] = useState<UserSession | null>(null);
 
@@ -38,14 +38,14 @@ export default function useProvideAuth() {
     return data;
   }
 
-  async function isAuthed(url: string = "http://localhost:3001/api/v1/auth") {
-    await fetchGet(url);
+  async function isAuthed() {
+    await fetchSession();
 
-    if (data.content?.id) {
+    if (data.status === "success" && data.content?.id) {
       return setUser(data.content);
+    } else {
+      return setUser(null);
     }
-
-    return setUser(null);
   }
 
   return {

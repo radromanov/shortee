@@ -1,13 +1,11 @@
 import { Navigate, Outlet } from "react-router-dom";
 import { useSession } from "../utils/hooks/useSession";
-import { useAuth } from "../utils/hooks/useAuth";
 import { PuffLoader } from "react-spinners";
 
 const Unauthorized = () => {
-  const authed = useSession();
-  const { isLoading } = useAuth();
+  const data = useSession();
 
-  if (isLoading) {
+  if (data.status === "loading") {
     return (
       <div className="flex flex-col w-screen h-screen justify-center items-center">
         <PuffLoader color="#ce36d6" speedMultiplier={0.5} />
@@ -15,7 +13,7 @@ const Unauthorized = () => {
     );
   }
 
-  return authed?.id ? <Navigate to={"/"} replace /> : <Outlet />;
+  return data.content?.id ? <Navigate to={"/"} replace /> : <Outlet />;
 };
 
 export default Unauthorized;

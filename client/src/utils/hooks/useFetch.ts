@@ -59,7 +59,14 @@ export const useFetch = <C>() => {
         ...fetchOpts,
         method,
       };
+    } else {
+      fetchOpts = {
+        ...fetchOpts,
+        method: "GET",
+      };
     }
+
+    console.log(fetchOpts);
 
     setData((prev) => ({
       ...prev,
@@ -140,10 +147,20 @@ export const useFetch = <C>() => {
     });
 
   const fetchLogout = () =>
-    fetchGet("http://localhost:3001/api/v1/auth/logout", "GET");
+    fetchGet("http://localhost:3001/api/v1/auth/logout");
+
+  const fetchSession = () =>
+    fetchGet("http://localhost:3001/api/v1/auth", "GET");
 
   const fetchGet = (url: string, method: HTTPMethod = "GET") =>
     fetchData({ url, method });
 
-  return { fetchLogin, fetchLogout, fetchSignup, fetchGet, data };
+  return {
+    fetchLogin,
+    fetchLogout,
+    fetchSignup,
+    fetchSession,
+    fetchGet,
+    data,
+  };
 };
