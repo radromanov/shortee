@@ -5,17 +5,18 @@ import {
   UserLoginPayload,
   UserSession,
 } from "../types/User.type";
-import { State } from "../hooks/useFetch";
+import { Exception } from "../types/Error.type";
 
 interface AuthContext {
-  login: (payload: UserLoginPayload) => Promise<State<UserSession>>;
-  logout: () => Promise<State<UserSession>>;
-  signup: (payload: UserInfoPayload) => Promise<State<UserSession>>;
+  login: (payload: UserLoginPayload) => Promise<UserSession | null>;
+  logout: () => Promise<void>;
+  signup: (payload: UserInfoPayload) => Promise<boolean>;
 
-  data: State<UserSession>;
   user: UserSession | null;
+  error: Exception | null;
   setUser: React.Dispatch<React.SetStateAction<UserSession | null>>;
-  isAuthed(): Promise<void>;
+  isAuthed(): Promise<UserSession | null>;
+  isLoading: "idle" | "loading" | "success" | "fail";
 }
 
 export const AuthContext = createContext<AuthContext>({} as AuthContext);

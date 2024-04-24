@@ -8,6 +8,10 @@ export default function ExceptionMiddleware(
   _next: NextFunction
 ) {
   if (err instanceof Exception) {
+    if (err.status === 401) {
+      res.clearCookie("connect.sid");
+    }
+
     return res.status(err.status).send(err.serialize());
   }
 

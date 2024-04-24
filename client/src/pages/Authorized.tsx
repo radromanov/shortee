@@ -3,11 +3,9 @@ import { PuffLoader } from "react-spinners";
 import { useSession } from "../utils/hooks/useSession";
 
 const Authorized = () => {
-  const data = useSession();
+  const { user, isLoading } = useSession();
 
-  console.log(data);
-
-  if (data.status === "loading") {
+  if (isLoading === "loading") {
     return (
       <div className="flex flex-col w-screen h-screen justify-center items-center">
         <PuffLoader color="#ce36d6" speedMultiplier={0.5} />
@@ -15,7 +13,9 @@ const Authorized = () => {
     );
   }
 
-  return data.content?.id ? (
+  console.log("AUTHORIZED", user);
+
+  return user ? (
     <Outlet />
   ) : (
     <main className="flex flex-col w-screen h-screen justify-center items-center">

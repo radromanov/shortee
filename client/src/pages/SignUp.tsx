@@ -19,7 +19,7 @@ const SignUp = () => {
     username: "",
   });
 
-  const { data, signup, login } = useAuth();
+  const { isLoading, error, signup, login } = useAuth();
 
   const handleSignup = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -34,8 +34,6 @@ const SignUp = () => {
     });
   };
 
-  console.log(data);
-
   return (
     <div className="flex flex-col gap-2 justify-center items-center w-screen h-screen">
       <form
@@ -49,7 +47,7 @@ const SignUp = () => {
             type="email"
             value={formData.email}
             onChange={handleInput}
-            disabled={data.status === "loading"}
+            disabled={isLoading === "loading"}
             autoFocus={true}
             schema={EmailSchema}
           />
@@ -59,7 +57,7 @@ const SignUp = () => {
             type="text"
             value={formData.username}
             onChange={handleInput}
-            disabled={data.status === "loading"}
+            disabled={isLoading === "loading"}
             schema={UsernameSchema}
           />
 
@@ -68,7 +66,7 @@ const SignUp = () => {
             type="password"
             value={formData.password}
             onChange={handleInput}
-            disabled={data.status === "loading"}
+            disabled={isLoading === "loading"}
             schema={PasswordSchema}
           />
 
@@ -77,26 +75,26 @@ const SignUp = () => {
             type="password"
             value={formData.confirmPassword}
             onChange={handleInput}
-            disabled={data.status === "loading"}
+            disabled={isLoading === "loading"}
             schema={ConfirmPasswordSchema}
           />
         </div>
 
         <div className="flex flex-col gap-2 items-center w-full">
-          {data.error?.message ? (
+          {error?.message ? (
             <p>
-              <span className="text-red-400">{data.error.message}</span>
+              <span className="text-red-400">{error.message}</span>
             </p>
           ) : (
             <></>
           )}
           <Button
-            disabled={data.status === "loading"}
+            disabled={isLoading === "loading"}
             className={`w-full ${
-              data.status === "loading" ? "cursor-not-allowed" : ""
+              isLoading === "loading" ? "cursor-not-allowed" : ""
             }`}
             text={
-              data.status === "loading" ? (
+              isLoading === "loading" ? (
                 <div className="flex justify-center items-center">
                   <PuffLoader size={24} color="white" speedMultiplier={0.5} />
                 </div>

@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import {
   UserSession,
   UserLoginPayload,
@@ -6,16 +6,38 @@ import {
   UserInfoPayload,
 } from "../types/User.type";
 import { useFetch } from "./useFetch";
+import { Exception } from "../types/Error.type";
 
 export default function useProvideAuth() {
   const { data, fetchLogin, fetchSignup, fetchLogout, fetchSession } =
     useFetch<UserSession>();
   const [user, setUser] = useState<UserSession | null>(null);
+  const [isLoading, setIsLoading] = useState<
+    "idle" | "loading" | "success" | "fail"
+  >("idle");
+  const [error, setError] = useState<Exception | null>(null);
+
+  useEffect(() => {
+    if (
+      data.content &&
+      "id" in data.content &&
+      "username" in data.content &&
+      "email" in data.content
+    ) {
+      setUser(data.content);
+    }
+    setIsLoading(data.status);
+    setError(data.error);
+  }, [data.error, data.content, data.status]);
 
   async function signup(payload: UserInfoPayload) {
     await fetchSignup(payload, UserSessionSchema);
 
-    return data;
+    if (data.status === "success") {
+      return true;
+    }
+
+    return false;
   }
 
   async function login(payload: UserLoginPayload) {
@@ -25,32 +47,37 @@ export default function useProvideAuth() {
       setUser(data.content);
     }
 
-    return data;
+    return user;
   }
 
   async function logout() {
-    await fetchLogout();
-
-    if (data.status === "success") {
+    try {
+      await fetchLogout();
       setUser(null);
+    } catch (error) {
+      console.log(error);
     }
-
-    return data;
   }
 
   async function isAuthed() {
+    if (user) {
+      return user;
+    }
     await fetchSession();
 
     if (data.status === "success" && data.content?.id) {
-      return setUser(data.content);
+      setUser(data.content);
+      return user;
     } else {
-      return setUser(null);
+      setUser(null);
+      return null;
     }
   }
 
   return {
-    data,
     user,
+    isLoading,
+    error,
     setUser,
     login,
     logout,

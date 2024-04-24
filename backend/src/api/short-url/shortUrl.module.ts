@@ -20,13 +20,17 @@ export default class ShortURLModule {
   }
 
   private routes() {
-    this.router.post(
-      "/",
-      asyncErrorHandler(isAuthed),
-      asyncErrorHandler(
-        async (req, res) => await this.controller.handleCreate(req, res)
+    this.router
+      .post(
+        "/",
+        asyncErrorHandler(isAuthed),
+        asyncErrorHandler(
+          async (req, res) => await this.controller.handleCreate(req, res)
+        )
       )
-    );
+      .get("/", asyncErrorHandler(isAuthed), (_req, res) =>
+        res.status(200).send({ urls: ["urls", "go", "here"] })
+      );
 
     this.app.use(this.PREFIX, this.router);
   }

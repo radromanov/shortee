@@ -66,8 +66,6 @@ export const useFetch = <C>() => {
       };
     }
 
-    console.log(fetchOpts);
-
     setData((prev) => ({
       ...prev,
       content: null,
