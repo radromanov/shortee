@@ -7,7 +7,6 @@ interface FormProps
   > {
   id: string;
   error: Exception | null;
-  isLoading: boolean;
   className?: string;
   onSubmit: React.FormEventHandler<HTMLFormElement>;
   children: React.ReactNode;
@@ -16,7 +15,6 @@ interface FormProps
 const Form = ({
   id,
   error,
-  isLoading,
   className,
   onSubmit,
   children,
@@ -35,7 +33,6 @@ const Form = ({
           <span className="text-red-500">{error.message}</span>
         </p>
       )}
-      {isLoading && <p>Loading...</p>}
     </form>
   );
 };

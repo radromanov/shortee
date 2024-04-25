@@ -42,12 +42,7 @@ const SignUp = () => {
 
   return (
     <PageWrapper>
-      <Form
-        id="signup-form"
-        error={error}
-        isLoading={isLoading === "loading"}
-        onSubmit={handleSignup}
-      >
+      <Form id="signup-form" error={error} onSubmit={handleSignup}>
         <Input
           text="email"
           type="email"
@@ -93,7 +88,7 @@ const SignUp = () => {
         />
       </Form>
 
-      <InitialFooter link="Login">Already have an account?</InitialFooter>
+      <InitialFooter linkText="Login">Already have an account?</InitialFooter>
     </PageWrapper>
   );
 };

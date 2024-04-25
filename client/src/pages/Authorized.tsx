@@ -6,7 +6,7 @@ const Authorized = () => {
   const { user, guest, isLoading } = useSession();
 
   if (isLoading === "loading" && !guest) {
-    return <Spinner color="#ce36d6" />;
+    return <Spinner color="purple" />;
   }
 
   return user ? (

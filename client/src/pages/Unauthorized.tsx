@@ -6,7 +6,7 @@ const Unauthorized = () => {
   const { user, isLoading } = useSession();
 
   if (isLoading === "loading") {
-    return <Spinner color="#ce36d6" />;
+    return <Spinner color="purple" />;
   }
 
   return user ? <Navigate to={"/"} replace /> : <Outlet />;

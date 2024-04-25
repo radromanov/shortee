@@ -33,12 +33,7 @@ const Login = () => {
 
   return (
     <PageWrapper>
-      <Form
-        id="login-form"
-        error={error}
-        isLoading={isLoading === "loading"}
-        onSubmit={handleLogin}
-      >
+      <Form id="login-form" error={error} onSubmit={handleLogin}>
         <Input
           text="email"
           value={formData.email}
@@ -70,7 +65,7 @@ const Login = () => {
         />
       </Form>
 
-      <InitialFooter link="sign up">Don't have an account?</InitialFooter>
+      <InitialFooter linkText="sign up">Don't have an account?</InitialFooter>
     </PageWrapper>
   );
 };

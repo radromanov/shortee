@@ -8,7 +8,7 @@ import { ShortURL } from "../utils/types/Url.type";
 import Spinner from "../components/Spinner";
 
 const Home = () => {
-  const { logout, user } = useAuth();
+  const { logout, user, isLoading } = useAuth();
   const { fetchGet, data } = useFetch<ShortURL[]>();
   const [showModal, setShowModal] = useState(false);
 
@@ -22,33 +22,38 @@ const Home = () => {
 
   return (
     <>
-      <h1 className="text-2xl">Hi, {user?.username}</h1>
-
-      {data.status === "loading" ? (
-        <Spinner />
+      {isLoading === "loading" ? (
+        <Spinner color="purple" />
       ) : data.error ? (
         <p className="text-red-500">{data.error.message}</p>
       ) : (
-        <div className={`text-white ${showModal ? "blur" : ""}`}>
-          {showModal && (
-            <AddLinkModal>
-              <AddLink setShowModal={setShowModal} />
-            </AddLinkModal>
-          )}
+        <>
+          <h1 className="text-2xl">Hi, {user?.username}</h1>
+          <div className={`text-white ${showModal ? "blur" : ""}`}>
+            {showModal && (
+              <AddLinkModal>
+                <AddLink setShowModal={setShowModal} />
+              </AddLinkModal>
+            )}
 
-          <ul>
-            {data?.content?.map((url) => (
-              <li key={url.id}>{url.name}</li>
-            ))}
-          </ul>
+            {data.status === "loading" ? (
+              <Spinner color="purple" />
+            ) : (
+              <ul>
+                {data?.content?.map((url) => (
+                  <li key={url.id}>{url.name}</li>
+                ))}
+              </ul>
+            )}
 
-          <Button
-            text="Add link"
-            variant="default"
-            onClick={() => setShowModal(true)}
-          />
-          <Button text="Log out" variant="default" onClick={logout} />
-        </div>
+            <Button
+              text="Add link"
+              variant="default"
+              onClick={() => setShowModal(true)}
+            />
+            <Button text="Log out" variant="default" onClick={logout} />
+          </div>
+        </>
       )}
     </>
   );
