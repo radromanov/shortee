@@ -1,5 +1,7 @@
 import { useState } from "react";
 import Button from "./Button";
+import Input from "./Input";
+import { NameSchema, URLSchema } from "../utils/types/Url.type";
 
 interface Props {
   setShowModal: React.Dispatch<React.SetStateAction<boolean>>;
@@ -35,28 +37,26 @@ const AddLink = ({ setShowModal }: Props) => {
   return (
     <div className="absolute top-0 left-1/2 -translate-x-1/2">
       <form onSubmit={handleSubmit}>
-        <label htmlFor="url">
-          <p>
-            <span>URL</span>
-          </p>
-          <input
-            id="url"
-            name="url"
-            value={formData.url}
-            onChange={handleInput}
-          />
-        </label>
-        <label htmlFor="name">
-          <p>
-            <span>Name</span>
-          </p>
-          <input
-            id="name"
-            name="name"
-            value={formData.name}
-            onChange={handleInput}
-          />
-        </label>
+        <Input
+          id="url"
+          name="url"
+          text="URL"
+          onChange={handleInput}
+          value={formData.url}
+          schema={URLSchema}
+          type="text"
+        />
+
+        <Input
+          id="name"
+          name="name"
+          text="name"
+          onChange={handleInput}
+          value={formData.name}
+          schema={NameSchema}
+          type="text"
+        />
+
         <Button
           text="Add"
           variant="default"

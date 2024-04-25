@@ -1,5 +1,8 @@
 import { z } from "zod";
 
+export const URLSchema = z.string().url();
+export const NameSchema = z.string().min(1);
+
 export const ShortURLSchema = z.object({
   id: z.string().min(1),
   ownerId: z.string().min(1),
