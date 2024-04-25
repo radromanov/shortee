@@ -1,7 +1,9 @@
 import React, { useState } from "react";
 import Button from "../components/Button";
 import { useAuth } from "../utils/hooks/useAuth";
-import LoadingScreen from "../components/LoadingScreen";
+import PageWrapper from "../components/PageWrapper";
+import Input from "../components/Input";
+import { EmailSchema, PasswordSchema } from "../utils/types/User.type";
 
 const Login = () => {
   const [formData, setFormData] = useState<{ email: string; password: string }>(
@@ -27,39 +29,35 @@ const Login = () => {
   };
 
   return (
-    <div>
-      <form id="login-form" onSubmit={handleLogin}>
+    <PageWrapper>
+      <form
+        className="flex flex-col w-3/12 gap-4"
+        id="login-form"
+        onSubmit={handleLogin}
+      >
         <div>
-          <label htmlFor="email">
-            <p>
-              <span>Email</span>
-            </p>
-            <input
-              value={formData.email}
-              onChange={handleInput}
-              name="email"
-              id="email"
-              type="email"
-              disabled={isLoading === "loading"}
-              required
-              autoFocus
-            />
-          </label>
+          <Input
+            text="email"
+            value={formData.email}
+            onChange={handleInput}
+            type="email"
+            id="email"
+            name="email"
+            schema={EmailSchema}
+            disabled={isLoading === "loading"}
+            autoFocus
+          />
 
-          <label htmlFor="password">
-            <p>
-              <span>Password</span>
-            </p>
-            <input
-              value={formData.password}
-              onChange={handleInput}
-              name="password"
-              id="password"
-              type="password"
-              disabled={isLoading === "loading"}
-              required
-            />
-          </label>
+          <Input
+            text="password"
+            value={formData.password}
+            onChange={handleInput}
+            type="password"
+            id="password"
+            name="password"
+            schema={PasswordSchema}
+            disabled={isLoading === "loading"}
+          />
         </div>
 
         {error?.message && (
@@ -68,12 +66,11 @@ const Login = () => {
           </p>
         )}
 
-        {isLoading === "loading" && <LoadingScreen />}
-
         <Button
           disabled={isLoading === "loading"}
           text="Log in"
           variant="default"
+          className="w-full"
         />
       </form>
       <p>
@@ -85,7 +82,7 @@ const Login = () => {
           .
         </span>
       </p>
-    </div>
+    </PageWrapper>
   );
 };
 

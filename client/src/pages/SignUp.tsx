@@ -10,6 +10,7 @@ import {
 } from "../utils/types/User.type";
 import { PuffLoader } from "react-spinners";
 import { useAuth } from "../utils/hooks/useAuth";
+import PageWrapper from "../components/PageWrapper";
 
 const SignUp = () => {
   const [formData, setFormData] = useState<UserInfoPayload>({
@@ -38,9 +39,9 @@ const SignUp = () => {
   };
 
   return (
-    <div className="flex flex-col gap-2 justify-center items-center w-screen h-screen">
+    <PageWrapper>
       <form
-        className="flex flex-col w-2/5 gap-2"
+        className="flex flex-col w-3/12 gap-4"
         id="signup-form"
         onSubmit={handleSignup}
       >
@@ -114,7 +115,7 @@ const SignUp = () => {
         </a>
         .
       </p>
-    </div>
+    </PageWrapper>
   );
 };
 
