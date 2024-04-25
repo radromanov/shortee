@@ -4,14 +4,15 @@ interface Button
     HTMLButtonElement
   > {
   text: string | JSX.Element;
+  isLoading: boolean;
   variant: "default" | "warning";
   className?: string;
 }
 
-const Button = ({ variant, text, className, ...props }: Button) => {
+const Button = ({ variant, isLoading, text, className, ...props }: Button) => {
   let styles =
     className +
-    " px-3 py-1 rounded-md disabled:cursor-not-allowed disabled:bg-neutral-700 transition-colors ";
+    " relative px-3 py-1 rounded-md disabled:cursor-not-allowed disabled:bg-neutral-700 transition-colors ";
 
   switch (variant) {
     case "warning":
@@ -23,8 +24,16 @@ const Button = ({ variant, text, className, ...props }: Button) => {
   }
 
   return (
-    <button className={styles} {...props}>
-      {text}
+    <button
+      disabled={isLoading}
+      className={`${styles} ${className ?? ""} ${
+        isLoading ? "cursor-not-allowed" : ""
+      }`}
+      {...props}
+    >
+      <p>
+        <span>{text}</span>
+      </p>
     </button>
   );
 };

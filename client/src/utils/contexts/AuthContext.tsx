@@ -13,6 +13,7 @@ interface AuthContext {
   signup: (payload: UserInfoPayload) => Promise<boolean>;
 
   user: UserSession | null;
+  guest: boolean;
   error: Exception | null;
   setUser: React.Dispatch<React.SetStateAction<UserSession | null>>;
   isAuthed(): Promise<UserSession | null>;

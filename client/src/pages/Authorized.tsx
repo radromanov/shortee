@@ -1,12 +1,12 @@
 import { Link, Outlet } from "react-router-dom";
 import { useSession } from "../utils/hooks/useSession";
-import LoadingScreen from "../components/LoadingScreen";
+import Spinner from "../components/Spinner";
 
 const Authorized = () => {
-  const { user, isLoading } = useSession();
+  const { user, guest, isLoading } = useSession();
 
-  if (isLoading === "loading") {
-    return <LoadingScreen />;
+  if (isLoading === "loading" && !guest) {
+    return <Spinner color="#ce36d6" />;
   }
 
   return user ? (

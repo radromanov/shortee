@@ -8,9 +8,11 @@ import {
   UserInfoPayload,
   UsernameSchema,
 } from "../utils/types/User.type";
-import { PuffLoader } from "react-spinners";
 import { useAuth } from "../utils/hooks/useAuth";
 import PageWrapper from "../components/PageWrapper";
+import { Link } from "react-router-dom";
+import Form from "../components/Form";
+import Spinner from "../components/Spinner";
 
 const SignUp = () => {
   const [formData, setFormData] = useState<UserInfoPayload>({
@@ -40,79 +42,62 @@ const SignUp = () => {
 
   return (
     <PageWrapper>
-      <form
-        className="flex flex-col w-3/12 gap-4"
+      <Form
         id="signup-form"
+        error={error}
+        isLoading={isLoading === "loading"}
         onSubmit={handleSignup}
       >
-        <div className="flex flex-col gap-2">
-          <Input
-            text="email"
-            type="email"
-            value={formData.email}
-            onChange={handleInput}
-            disabled={isLoading === "loading"}
-            autoFocus={true}
-            schema={EmailSchema}
-          />
+        <Input
+          text="email"
+          type="email"
+          value={formData.email}
+          onChange={handleInput}
+          disabled={isLoading === "loading"}
+          autoFocus={true}
+          schema={EmailSchema}
+        />
 
-          <Input
-            text="username"
-            type="text"
-            value={formData.username}
-            onChange={handleInput}
-            disabled={isLoading === "loading"}
-            schema={UsernameSchema}
-          />
+        <Input
+          text="username"
+          type="text"
+          value={formData.username}
+          onChange={handleInput}
+          disabled={isLoading === "loading"}
+          schema={UsernameSchema}
+        />
 
-          <Input
-            text="password"
-            type="password"
-            value={formData.password}
-            onChange={handleInput}
-            disabled={isLoading === "loading"}
-            schema={PasswordSchema}
-          />
+        <Input
+          text="password"
+          type="password"
+          value={formData.password}
+          onChange={handleInput}
+          disabled={isLoading === "loading"}
+          schema={PasswordSchema}
+        />
 
-          <Input
-            text="confirm password"
-            type="password"
-            value={formData.confirmPassword}
-            onChange={handleInput}
-            disabled={isLoading === "loading"}
-            schema={ConfirmPasswordSchema}
-          />
-        </div>
+        <Input
+          text="confirm password"
+          type="password"
+          value={formData.confirmPassword}
+          onChange={handleInput}
+          disabled={isLoading === "loading"}
+          schema={ConfirmPasswordSchema}
+        />
 
-        <div className="flex flex-col gap-2 items-center w-full">
-          {error?.message && (
-            <p>
-              <span className="text-red-400">{error.message}</span>
-            </p>
-          )}
-          <Button
-            disabled={isLoading === "loading"}
-            className={`w-full ${
-              isLoading === "loading" ? "cursor-not-allowed" : ""
-            }`}
-            text={
-              isLoading === "loading" ? (
-                <div className="flex justify-center items-center">
-                  <PuffLoader size={24} color="white" speedMultiplier={0.5} />
-                </div>
-              ) : (
-                "Sign up"
-              )
-            }
-            variant="default"
-          />
-        </div>
-      </form>
+        <Button
+          isLoading={isLoading === "loading"}
+          text={isLoading === "loading" ? <Spinner size={24} /> : "Sign up"}
+          variant="default"
+          className="h-8"
+        />
+      </Form>
+
       <p>
         Already have an account?{" "}
-        <a className="underline text-violet-300" href="/login">
+        <Link className="underline text-violet-300" to="/login">
           Log in
-        </a>
+        </Link>
         .
       </p>
     </PageWrapper>

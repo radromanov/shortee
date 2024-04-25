@@ -5,7 +5,7 @@ import AddLinkModal from "../modals/AddLinkModal";
 import AddLink from "../components/AddLink";
 import { useFetch } from "../utils/hooks/useFetch";
 import { ShortURL } from "../utils/types/Url.type";
-import LoadingScreen from "../components/LoadingScreen";
+import Spinner from "../components/Spinner";
 
 const Home = () => {
   const { logout, user } = useAuth();
@@ -25,7 +25,7 @@ const Home = () => {
       <h1 className="text-2xl">Hi, {user?.username}</h1>
 
       {data.status === "loading" ? (
-        <LoadingScreen />
+        <Spinner />
       ) : data.error ? (
         <p className="text-red-500">{data.error.message}</p>
       ) : (

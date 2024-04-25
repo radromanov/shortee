@@ -4,6 +4,9 @@ import { useAuth } from "../utils/hooks/useAuth";
 import PageWrapper from "../components/PageWrapper";
 import Input from "../components/Input";
 import { EmailSchema, PasswordSchema } from "../utils/types/User.type";
+import { Link } from "react-router-dom";
+import Form from "../components/Form";
+import Spinner from "../components/Spinner";
 
 const Login = () => {
   const [formData, setFormData] = useState<{ email: string; password: string }>(
@@ -30,55 +33,49 @@ const Login = () => {
 
   return (
     <PageWrapper>
-      <form
-        className="flex flex-col w-3/12 gap-4"
+      <Form
         id="login-form"
+        error={error}
+        isLoading={isLoading === "loading"}
         onSubmit={handleLogin}
       >
-        <div>
-          <Input
-            text="email"
-            value={formData.email}
-            onChange={handleInput}
-            type="email"
-            id="email"
-            name="email"
-            schema={EmailSchema}
-            disabled={isLoading === "loading"}
-            autoFocus
-          />
+        <Input
+          text="email"
+          value={formData.email}
+          onChange={handleInput}
+          type="email"
+          id="email"
+          name="email"
+          schema={EmailSchema}
+          disabled={isLoading === "loading"}
+          autoFocus
+        />
 
-          <Input
-            text="password"
-            value={formData.password}
-            onChange={handleInput}
-            type="password"
-            id="password"
-            name="password"
-            schema={PasswordSchema}
-            disabled={isLoading === "loading"}
-          />
-        </div>
-
-        {error?.message && (
-          <p>
-            <span className="text-red-500">{error.message}</span>
-          </p>
-        )}
+        <Input
+          text="password"
+          value={formData.password}
+          onChange={handleInput}
+          type="password"
+          id="password"
+          name="password"
+          schema={PasswordSchema}
+          disabled={isLoading === "loading"}
+        />
 
         <Button
-          disabled={isLoading === "loading"}
-          text="Log in"
+          isLoading={isLoading === "loading"}
+          text={isLoading === "loading" ? <Spinner size={24} /> : "Log in"}
           variant="default"
-          className="w-full"
+          className="h-8"
         />
-      </form>
+      </Form>
+
       <p>
         <span>
           Don't have an account?{" "}
-          <a className="underline text-violet-300" href="/sign-up">
+          <Link className="underline text-violet-300" to="/sign-up">
             Sign up
-          </a>
+          </Link>
           .
         </span>
       </p>
