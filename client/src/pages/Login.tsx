@@ -4,9 +4,9 @@ import { useAuth } from "../utils/hooks/useAuth";
 import PageWrapper from "../components/PageWrapper";
 import Input from "../components/Input";
 import { EmailSchema, PasswordSchema } from "../utils/types/User.type";
-import { Link } from "react-router-dom";
 import Form from "../components/Form";
 import Spinner from "../components/Spinner";
+import InitialFooter from "../components/InitialFooter";
 
 const Login = () => {
   const [formData, setFormData] = useState<{ email: string; password: string }>(
@@ -70,15 +70,7 @@ const Login = () => {
         />
       </Form>
 
-      <p>
-        <span>
-          Don't have an account?{" "}
-          <Link className="underline text-violet-300" to="/sign-up">
-            Sign up
-          </Link>
-          .
-        </span>
-      </p>
+      <InitialFooter link="sign up">Don't have an account?</InitialFooter>
     </PageWrapper>
   );
 };

@@ -4,7 +4,7 @@ interface Button
     HTMLButtonElement
   > {
   text: string | JSX.Element;
-  isLoading: boolean;
+  isLoading?: boolean;
   variant: "default" | "warning";
   className?: string;
 }

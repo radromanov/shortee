@@ -10,9 +10,9 @@ import {
 } from "../utils/types/User.type";
 import { useAuth } from "../utils/hooks/useAuth";
 import PageWrapper from "../components/PageWrapper";
-import { Link } from "react-router-dom";
 import Form from "../components/Form";
 import Spinner from "../components/Spinner";
+import InitialFooter from "../components/InitialFooter";
 
 const SignUp = () => {
   const [formData, setFormData] = useState<UserInfoPayload>({
@@ -93,13 +93,7 @@ const SignUp = () => {
         />
       </Form>
 
-      <p>
-        Already have an account?{" "}
-        <Link className="underline text-violet-300" to="/login">
-          Log in
-        </Link>
-        .
-      </p>
+      <InitialFooter link="Login">Already have an account?</InitialFooter>
     </PageWrapper>
   );
 };
