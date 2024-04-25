@@ -21,7 +21,7 @@ const InitialFooter = ({ linkText, children, ...props }: FooterProps) => {
       {...props}
     >
       <p>
-        <span>
+        <span className="font-bold">
           {children}{" "}
           <Link className="underline text-violet-300" to={formattedLink}>
             {displayText}

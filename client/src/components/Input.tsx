@@ -50,7 +50,7 @@ function Input<T>({
         <span className="font-semibold">{label}</span>
       </p>
       <input
-        className={`w-full border rounded-md px-3 py-1 bg-slate-200 text-black text-md lg:px-4 lg:py-2 ${
+        className={`w-full border rounded-md px-3 py-1 bg-slate-200 text-black text-md ${
           className ?? ""
         } ${disabled ? "cursor-not-allowed hover:bg-gray-400" : ""} ${
           error ? "border-red-600" : "border-black"

@@ -24,12 +24,15 @@ const Form = ({
     <form
       id={id}
       onSubmit={onSubmit}
-      className={`flex flex-col w-2/3 text-sm sm:w-3/5 sm:text-lg md:w-2/4 md:text-lg lg:text-xl gap-4 ${
-        className ?? ""
-      }`}
+      className={`flex flex-col w-5/12 text-sm 
+      sm:w-4/12 sm:text-sm
+      md:w-4/12 md:text-sm 
+      lg:w-3/12 lg:text-sm 
+      xl:w-3/12 xl:text-sm
+      2xl:w-2/12 2xl:text-sm ${className ?? ""}`}
       {...props}
     >
-      <div className="flex flex-col gap-2">{children}</div>
+      <div className="flex flex-col gap-8">{children}</div>
       {error?.message && (
         <p>
           <span className="text-red-500">{error.message}</span>

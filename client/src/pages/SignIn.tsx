@@ -7,8 +7,9 @@ import { EmailSchema, PasswordSchema } from "../utils/types/User.type";
 import Form from "../components/Form";
 import Spinner from "../components/Spinner";
 import InitialFooter from "../components/InitialFooter";
+import InputWrapper from "../components/InputWrapper";
 
-const Login = () => {
+const SignIn = () => {
   const [formData, setFormData] = useState<{ email: string; password: string }>(
     { email: "", password: "" }
   );
@@ -34,34 +35,36 @@ const Login = () => {
   return (
     <PageWrapper>
       <Form id="login-form" error={error} onSubmit={handleLogin}>
-        <Input
-          text="email"
-          value={formData.email}
-          onChange={handleInput}
-          type="email"
-          id="email"
-          name="email"
-          schema={EmailSchema}
-          disabled={isLoading === "loading"}
-          autoFocus
-        />
+        <InputWrapper>
+          <Input
+            text="email"
+            value={formData.email}
+            onChange={handleInput}
+            type="email"
+            id="email"
+            name="email"
+            schema={EmailSchema}
+            disabled={isLoading === "loading"}
+            autoFocus
+          />
 
-        <Input
-          text="password"
-          value={formData.password}
-          onChange={handleInput}
-          type="password"
-          id="password"
-          name="password"
-          schema={PasswordSchema}
-          disabled={isLoading === "loading"}
-        />
+          <Input
+            text="password"
+            value={formData.password}
+            onChange={handleInput}
+            type="password"
+            id="password"
+            name="password"
+            schema={PasswordSchema}
+            disabled={isLoading === "loading"}
+          />
+        </InputWrapper>
 
         <Button
           isLoading={isLoading === "loading"}
-          text={isLoading === "loading" ? <Spinner size={24} /> : "Log in"}
+          text={isLoading === "loading" ? <Spinner size={24} /> : "Sign in"}
           variant="default"
-          className="h-8"
+          className="w-full"
         />
       </Form>
 
@@ -70,4 +73,4 @@ const Login = () => {
   );
 };
 
-export default Login;
+export default SignIn;

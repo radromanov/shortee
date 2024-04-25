@@ -13,6 +13,7 @@ import PageWrapper from "../components/PageWrapper";
 import Form from "../components/Form";
 import Spinner from "../components/Spinner";
 import InitialFooter from "../components/InitialFooter";
+import InputWrapper from "../components/InputWrapper";
 
 const SignUp = () => {
   const [formData, setFormData] = useState<UserInfoPayload>({
@@ -43,52 +44,54 @@ const SignUp = () => {
   return (
     <PageWrapper>
       <Form id="signup-form" error={error} onSubmit={handleSignup}>
-        <Input
-          text="email"
-          type="email"
-          value={formData.email}
-          onChange={handleInput}
-          disabled={isLoading === "loading"}
-          autoFocus={true}
-          schema={EmailSchema}
-        />
+        <InputWrapper>
+          <Input
+            text="email"
+            type="email"
+            value={formData.email}
+            onChange={handleInput}
+            disabled={isLoading === "loading"}
+            autoFocus={true}
+            schema={EmailSchema}
+          />
 
-        <Input
-          text="username"
-          type="text"
-          value={formData.username}
-          onChange={handleInput}
-          disabled={isLoading === "loading"}
-          schema={UsernameSchema}
-        />
+          <Input
+            text="username"
+            type="text"
+            value={formData.username}
+            onChange={handleInput}
+            disabled={isLoading === "loading"}
+            schema={UsernameSchema}
+          />
 
-        <Input
-          text="password"
-          type="password"
-          value={formData.password}
-          onChange={handleInput}
-          disabled={isLoading === "loading"}
-          schema={PasswordSchema}
-        />
+          <Input
+            text="password"
+            type="password"
+            value={formData.password}
+            onChange={handleInput}
+            disabled={isLoading === "loading"}
+            schema={PasswordSchema}
+          />
 
-        <Input
-          text="confirm password"
-          type="password"
-          value={formData.confirmPassword}
-          onChange={handleInput}
-          disabled={isLoading === "loading"}
-          schema={ConfirmPasswordSchema}
-        />
+          <Input
+            text="confirm password"
+            type="password"
+            value={formData.confirmPassword}
+            onChange={handleInput}
+            disabled={isLoading === "loading"}
+            schema={ConfirmPasswordSchema}
+          />
+        </InputWrapper>
 
         <Button
           isLoading={isLoading === "loading"}
           text={isLoading === "loading" ? <Spinner size={24} /> : "Sign up"}
           variant="default"
-          className="h-8"
+          className="w-full"
         />
       </Form>
 
-      <InitialFooter linkText="Login">Already have an account?</InitialFooter>
+      <InitialFooter linkText="Sign in">Already have an account?</InitialFooter>
     </PageWrapper>
   );
 };

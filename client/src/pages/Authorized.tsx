@@ -17,8 +17,8 @@ const Authorized = () => {
       <p className="text-xl">
         <span>
           Please,{" "}
-          <Link to="/login">
-            <span className="underline text-violet-300">log in</span>
+          <Link to="/sign-in">
+            <span className="underline text-violet-300">sign in</span>
           </Link>{" "}
           or{" "}
           <Link to="/sign-up">
