@@ -12,7 +12,7 @@ interface Button
 const Button = ({ variant, isLoading, text, className, ...props }: Button) => {
   let styles =
     className +
-    " relative px-3 py-1 rounded-md disabled:cursor-not-allowed disabled:bg-neutral-700 transition-colors ";
+    " relative px-3 py-1 rounded-md disabled:cursor-not-allowed disabled:bg-neutral-700 transition-colors lg:h-12 ";
 
   switch (variant) {
     case "warning":
@@ -32,7 +32,7 @@ const Button = ({ variant, isLoading, text, className, ...props }: Button) => {
       {...props}
     >
       <p>
-        <span>{text}</span>
+        <span className="font-bold">{text}</span>
       </p>
     </button>
   );

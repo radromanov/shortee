@@ -50,9 +50,11 @@ function Input<T>({
         <span className="font-semibold">{label}</span>
       </p>
       <input
-        className={`w-full border rounded-md px-3 py-1 ${className ?? ""} ${
-          disabled ? "cursor-not-allowed hover:bg-neutral-800" : ""
-        } ${error ? "border-red-500" : "border-neutral-700"}`}
+        className={`w-full border rounded-md px-3 py-1 bg-slate-200 text-black text-md lg:px-4 lg:py-2 ${
+          className ?? ""
+        } ${disabled ? "cursor-not-allowed hover:bg-gray-400" : ""} ${
+          error ? "border-red-600" : "border-black"
+        }`}
         name={name}
         type={type}
         value={value}
@@ -64,8 +66,8 @@ function Input<T>({
         {...props}
       />
       {error ? (
-        <p className="flex justify-center">
-          <span className="text-red-400">{error}</span>
+        <p className="flex justify-center text-center">
+          <span className="text-red-400 text-md">{error}</span>
         </p>
       ) : (
         <></>

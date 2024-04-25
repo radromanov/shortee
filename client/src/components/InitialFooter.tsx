@@ -17,7 +17,7 @@ const InitialFooter = ({ linkText, children, ...props }: FooterProps) => {
 
   return (
     <footer
-      className="absolute bottom-8 left-1/2 -translate-x-1/2 translate-y-1/2"
+      className="absolute bottom-8 left-1/2 -translate-x-1/2 translate-y-1/2 w-full text-center"
       {...props}
     >
       <p>

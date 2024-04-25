@@ -24,7 +24,9 @@ const Form = ({
     <form
       id={id}
       onSubmit={onSubmit}
-      className={`flex flex-col w-3/12 gap-4 ${className ?? ""}`}
+      className={`flex flex-col w-2/3 text-sm sm:w-3/5 sm:text-lg md:w-2/4 md:text-lg lg:text-xl gap-4 ${
+        className ?? ""
+      }`}
       {...props}
     >
       <div className="flex flex-col gap-2">{children}</div>
