@@ -36,6 +36,13 @@ export default class ShortURLModule {
         )
       );
 
+    this.router.get(
+      "/:id",
+      asyncErrorHandler(
+        async (req, res) => await this.controller.handleRedirect(req, res)
+      )
+    );
+
     this.app.use(this.PREFIX, this.router);
   }
 }

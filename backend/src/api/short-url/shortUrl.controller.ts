@@ -29,4 +29,8 @@ export default class ShortURLController {
 
     res.status(201).send(short[0]);
   }
+
+  async handleRedirect(_req: Request, res: Response) {
+    res.redirect(302, "https://www.google.com");
+  }
 }

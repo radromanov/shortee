@@ -23,12 +23,24 @@ export default class Application {
   }
 
   initialize() {
+    const { NODE_ENV, PORT, DOMAIN } = this.config.get();
+
     const userRoutes = new UserModule(this.app).init();
     const urlRoutes = new ShortURLModule(this.app).init();
     const authRoutes = new AuthModule(this.app).init();
 
     this.setup();
     this.modules([userRoutes, urlRoutes, authRoutes]);
+
+    // Handles initial client short link redirect to the api - this is what the user opens via the client app or a copied link
+    this.app.get("/:id", (req, res) => {
+      res.redirect(
+        302,
+        NODE_ENV === "development"
+          ? `http://localhost:${PORT}/api/v1/short-url${req.originalUrl}`
+          : `${DOMAIN}/api/v1/short-url${req.originalUrl}`
+      );
+    });
 
     this.app.all("*", NotFoundMiddleware);
     this.app.use(ExceptionMiddleware);
