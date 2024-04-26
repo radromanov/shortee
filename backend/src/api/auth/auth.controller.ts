@@ -1,11 +1,11 @@
 import { Request, Response } from "express";
 import { UserLoginSchema } from "../user/user.type";
 import Exception from "../../core/Exception";
-import { db } from "../../../db/schema/urls";
-import { users } from "../../../db/schema/users";
 import { eq } from "drizzle-orm";
 import AuthService from "./auth.service";
 import Auth from "./Auth";
+import { db } from "../../../db";
+import { users } from "../../../db/schema";
 
 export default class AuthController {
   constructor(

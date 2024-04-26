@@ -1,7 +1,7 @@
 import { compare } from "bcrypt";
 import { eq } from "drizzle-orm";
-import { db } from "../../../db/schema/urls";
-import { users } from "../../../db/schema/users";
+import { db } from "../../../db";
+import { users } from "../../../db/schema";
 
 export default class AuthService {
   constructor() {}

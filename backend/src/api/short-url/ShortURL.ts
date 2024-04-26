@@ -1,10 +1,10 @@
 import z from "zod";
-import { db, urls } from "../../../db/schema/urls";
 import { eq } from "drizzle-orm";
 import ID from "../id/id";
-import { ids } from "../../../db/schema/ids";
 import Config from "../../core/Config";
 import Exception from "../../core/Exception";
+import { ids, urls } from "../../../db/schema";
+import { db } from "../../../db";
 
 export const URLSchema = z
   .string()

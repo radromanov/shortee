@@ -10,7 +10,7 @@ Link shortener and "socials" page service built using Vite + Express.js.
     - [x] Client sends POST request with payload
     - [x] Server ensures user input is valid
     - [x] Server sends GET request to user-provided URL in payload
-        - [ ] if valid, proceed with creating the link - allow up to 10 links, duplicate URLs aren't allowed
+        - [x] if valid, proceed with creating the link - allow up to 10 links, duplicate URLs aren't allowed
         - [x] if invalid, send error to client (e.g. "Provided URL doesn't exist.")
 
 ## 2. Using links
