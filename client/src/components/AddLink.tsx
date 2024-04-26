@@ -16,6 +16,13 @@ const AddLink = ({ setShowModal }: Props) => {
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
+    if (!formData.name.length) {
+      setFormData((prev) => ({
+        ...prev,
+        name: prev.url,
+      }));
+    }
+
     return await fetch("http://localhost:3001/api/v1/short-url", {
       method: "POST",
       body: JSON.stringify(formData),
@@ -30,7 +37,7 @@ const AddLink = ({ setShowModal }: Props) => {
   const handleInput = (e: React.ChangeEvent<HTMLInputElement>) => {
     return setFormData((prev) => ({
       ...prev,
-      [e.target.name]: e.target.value,
+      [e.target.name]: e.target.value.toLowerCase(),
     }));
   };
 
@@ -55,6 +62,7 @@ const AddLink = ({ setShowModal }: Props) => {
           value={formData.name}
           schema={NameSchema}
           type="text"
+          required={false}
         />
 
         <Button

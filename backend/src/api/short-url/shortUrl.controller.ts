@@ -1,5 +1,6 @@
 import { Request, Response } from "express";
 import ShortURLService from "./shortUrl.service";
+import Exception from "../../core/Exception";
 
 export default class ShortURLController {
   constructor(
@@ -18,14 +19,17 @@ export default class ShortURLController {
   async handleCreate(req: Request, res: Response) {
     const payload = req.body;
 
+    const response = await fetch(payload.url);
+    if (!response.ok) {
+      throw new Exception("URL doesn't exist.", "Bad Request");
+    }
+
     const short = await this.service.create({
       name: payload.name,
       url: payload.url,
       // @ts-ignore
       ownerId: req.session.user.id,
     });
-
-    console.log(short[0]);
 
     res.status(201).send(short[0]);
   }

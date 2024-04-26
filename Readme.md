@@ -1,6 +1,6 @@
 ### Shurl
 
-Link shortener and "socials" page service.
+Link shortener and "socials" page service built using Vite + Express.js.
 
 # I. Links
 
@@ -9,15 +9,15 @@ Link shortener and "socials" page service.
     - [x] Client ensures user input is valid
     - [x] Client sends POST request with payload
     - [x] Server ensures user input is valid
-    - [ ] Server sends GET request to user-provided URL in payload
+    - [x] Server sends GET request to user-provided URL in payload
         - [ ] if valid, proceed with creating the link - allow up to 10 links, duplicate URLs aren't allowed
-        - [ ] if invalid, send error to client (e.g. "Provided URL doesn't exist.")
+        - [x] if invalid, send error to client (e.g. "Provided URL doesn't exist.")
 
 ## 2. Using links
 
     - User clicks on link
-        - [ ] GET request to the API with the specified short URL
-        - [ ] API endpoint sends a 302 redirect to the user where they get redirected to the original URL
+        - [x] GET request to the API with the specified short URL
+        - [x] API endpoint sends a 302 redirect to the user where they get redirected to the original URL
     - [ ] Copy to clipboard option (done via a "..." menu icon beside each link, which opens up a menu)
 
 ## 3. Links CRUD operations

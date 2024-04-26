@@ -6,19 +6,27 @@ import { ids } from "../../../db/schema/ids";
 import Config from "../../core/Config";
 import Exception from "../../core/Exception";
 
+export const URLSchema = z
+  .string()
+  .regex(
+    /^(?:https?|http?)(?::\/\/)(?:www\.)([a-zA-Z0-9-])+(?:\.[a-zA-Z]{2,})+(?::\d{2,5})?(?:\/[^\s]*)?$/,
+    "Please enter a valid URL."
+  );
+export const NameSchema = z.string();
+
 export const ShortURLSchema = z.object({
   id: z.string().min(1),
   ownerId: z.string().min(1),
-  name: z.string().min(1),
-  url: z.string().url(),
+  name: NameSchema,
+  url: URLSchema,
   short: z.string().url(),
   createdAt: z.date(),
   updatedAt: z.date(),
 });
 
 const URLPayloadSchema = z.object({
-  name: z.string().min(1),
-  url: z.string().min(1),
+  name: NameSchema,
+  url: URLSchema,
   ownerId: z.string().min(1),
 });
 type URLPayload = z.infer<typeof URLPayloadSchema>;
