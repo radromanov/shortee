@@ -1,6 +1,11 @@
 import { IoIosCopy } from "react-icons/io";
 import { FiEdit3 } from "react-icons/fi";
 import { RiDeleteBinLine } from "react-icons/ri";
+import { useClickOutside } from "../utils/hooks/useClickOutside";
+
+interface Props {
+  setIsClicked: React.Dispatch<React.SetStateAction<boolean>>;
+}
 
 const OPTIONS = { COPY: "Copy", EDIT: "Edit", DELETE: "Delete" } as const;
 
@@ -22,12 +27,18 @@ const assignElement = (method: (typeof OPTIONS)[keyof typeof OPTIONS]) => {
   return element;
 };
 
-const ShortLinkOpts = () => {
+const ShortLinkOpts = ({ setIsClicked }: Props) => {
   const OPTION_ELEMENTS = Object.values(OPTIONS).map((opt) => {
     return { method: opt, icon: assignElement(opt) };
   });
+
+  const element = useClickOutside(() => setIsClicked(false));
+
   return (
-    <ul className="translate-x-1/2 left-1/3 top-full absolute border border-slate-400 shadow-black shadow-md bg-white text-black rounded-md z-10">
+    <ul
+      ref={element}
+      className="translate-x-1/2 left-1/3 top-full absolute border border-slate-400 shadow-black shadow-md bg-white text-black rounded-md z-10"
+    >
       {OPTION_ELEMENTS.map((option) => (
         <li
           key={option.method}

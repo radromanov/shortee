@@ -15,7 +15,12 @@ const ShortLink = ({ url }: ShortLinkProps) => {
   return (
     <li
       onMouseEnter={() => setIsHovered(true)}
-      onMouseLeave={() => setIsHovered(false)}
+      onMouseLeave={() => {
+        // If mouse leaves and menu is not clicked...
+        if (!isClicked) {
+          setIsHovered(false);
+        }
+      }}
       className="relative flex gap-2"
     >
       <Link className="flex items-center justify-center w-full" to={url.short}>
@@ -24,13 +29,16 @@ const ShortLink = ({ url }: ShortLinkProps) => {
       {isHovered && (
         <>
           <IoEllipsisVerticalSharp
-            onClick={() => setIsClicked((prev) => !prev)}
+            onClick={() => {
+              setIsClicked((prev) => !prev);
+              setIsHovered(true);
+            }}
             size={24}
             className="cursor-pointer absolute opacity-70 font-light right-0"
           />
         </>
       )}
-      {isClicked && <ShortLinkOpts />}
+      {isClicked && <ShortLinkOpts setIsClicked={setIsClicked} />}
     </li>
   );
 };
