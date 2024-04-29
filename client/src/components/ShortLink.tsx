@@ -2,6 +2,7 @@ import { useState } from "react";
 import { ShortURL } from "../utils/types/Url.type";
 import { Link } from "react-router-dom";
 import { IoEllipsisVerticalSharp } from "react-icons/io5";
+import ShortLinkOpts from "./ShortLinkOpts";
 
 interface ShortLinkProps {
   url: ShortURL;
@@ -9,6 +10,7 @@ interface ShortLinkProps {
 
 const ShortLink = ({ url }: ShortLinkProps) => {
   const [isHovered, setIsHovered] = useState(false);
+  const [isClicked, setIsClicked] = useState(false);
 
   return (
     <li
@@ -20,11 +22,15 @@ const ShortLink = ({ url }: ShortLinkProps) => {
         {url.name}
       </Link>
       {isHovered && (
-        <IoEllipsisVerticalSharp
-          size={24}
-          className="cursor-pointer absolute opacity-70 font-light right-0"
-        />
+        <>
+          <IoEllipsisVerticalSharp
+            onClick={() => setIsClicked((prev) => !prev)}
+            size={24}
+            className="cursor-pointer absolute opacity-70 font-light right-0"
+          />
+        </>
       )}
+      {isClicked && <ShortLinkOpts />}
     </li>
   );
 };
