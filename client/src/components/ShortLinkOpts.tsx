@@ -2,8 +2,13 @@ import { IoIosCopy } from "react-icons/io";
 import { FiEdit3 } from "react-icons/fi";
 import { RiDeleteBinLine } from "react-icons/ri";
 import { useClickOutside } from "../utils/hooks/useClickOutside";
+import copyShortLink from "../utils/helpers/copyShortLink";
+import editShortLink from "../utils/helpers/editShortLink";
+import deleteShortLink from "../utils/helpers/deleteShortLink";
+import { ShortURL } from "../utils/types/Url.type";
 
 interface Props {
+  url: ShortURL;
   setIsClicked: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
@@ -27,12 +32,33 @@ const assignElement = (method: (typeof OPTIONS)[keyof typeof OPTIONS]) => {
   return element;
 };
 
-const ShortLinkOpts = ({ setIsClicked }: Props) => {
+const ShortLinkOpts = ({ url, setIsClicked }: Props) => {
   const OPTION_ELEMENTS = Object.values(OPTIONS).map((opt) => {
     return { method: opt, icon: assignElement(opt) };
   });
 
   const element = useClickOutside(() => setIsClicked(false));
+
+  const handleClickedMethod = async (e: React.MouseEvent) => {
+    const method = e.currentTarget
+      .ariaLabel as (typeof OPTIONS)[keyof typeof OPTIONS];
+
+    switch (method) {
+      case "Copy":
+        await copyShortLink(url.short);
+        break;
+
+      case "Edit":
+        editShortLink();
+        break;
+
+      case "Delete":
+        deleteShortLink();
+        break;
+    }
+
+    setIsClicked(false);
+  };
 
   return (
     <ul
@@ -41,7 +67,9 @@ const ShortLinkOpts = ({ setIsClicked }: Props) => {
     >
       {OPTION_ELEMENTS.map((option) => (
         <li
+          aria-label={option.method}
           key={option.method}
+          onClick={handleClickedMethod}
           className="cursor-pointer flex items-center justify-between gap-4 hover:bg-slate-300 px-2 py-2 rounded-md"
         >
           <p>

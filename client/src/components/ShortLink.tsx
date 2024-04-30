@@ -38,7 +38,7 @@ const ShortLink = ({ url }: ShortLinkProps) => {
           />
         </>
       )}
-      {isClicked && <ShortLinkOpts setIsClicked={setIsClicked} />}
+      {isClicked && <ShortLinkOpts url={url} setIsClicked={setIsClicked} />}
     </li>
   );
 };
