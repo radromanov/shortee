@@ -140,12 +140,22 @@ export const useFetch = <C>() => {
   const fetchGet = (url: string, method: HTTPMethod = "GET") =>
     fetchData({ url, method });
 
+  const fetchPut = (
+    url: string,
+    payload: { id: string; name: string; url: string },
+    schema: z.ZodSchema<C>,
+    method: HTTPMethod = "PUT"
+  ) => {
+    fetchData({ url, method, payload, schema });
+  };
+
   return {
     fetchLogin,
     fetchLogout,
     fetchSignup,
     fetchSession,
     fetchGet,
+    fetchPut,
     data,
   };
 };

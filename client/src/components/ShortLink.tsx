@@ -6,9 +6,16 @@ import ShortLinkOpts from "./ShortLinkOpts";
 
 interface ShortLinkProps {
   url: ShortURL;
+  setModal: React.Dispatch<
+    React.SetStateAction<{
+      isOpen: boolean;
+      form: "Add" | "Edit";
+      url: ShortURL | null;
+    }>
+  >;
 }
 
-const ShortLink = ({ url }: ShortLinkProps) => {
+const ShortLink = ({ url, setModal }: ShortLinkProps) => {
   const [isHovered, setIsHovered] = useState(false);
   const [isClicked, setIsClicked] = useState(false);
 
@@ -38,7 +45,13 @@ const ShortLink = ({ url }: ShortLinkProps) => {
           />
         </>
       )}
-      {isClicked && <ShortLinkOpts url={url} setIsClicked={setIsClicked} />}
+      {isClicked && (
+        <ShortLinkOpts
+          url={url}
+          setIsClicked={setIsClicked}
+          setModal={setModal}
+        />
+      )}
     </li>
   );
 };

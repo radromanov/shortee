@@ -3,13 +3,19 @@ import { FiEdit3 } from "react-icons/fi";
 import { RiDeleteBinLine } from "react-icons/ri";
 import { useClickOutside } from "../utils/hooks/useClickOutside";
 import copyShortLink from "../utils/helpers/copyShortLink";
-import editShortLink from "../utils/helpers/editShortLink";
 import deleteShortLink from "../utils/helpers/deleteShortLink";
 import { ShortURL } from "../utils/types/Url.type";
 
 interface Props {
   url: ShortURL;
   setIsClicked: React.Dispatch<React.SetStateAction<boolean>>;
+  setModal: React.Dispatch<
+    React.SetStateAction<{
+      isOpen: boolean;
+      form: "Add" | "Edit";
+      url: ShortURL | null;
+    }>
+  >;
 }
 
 const OPTIONS = { COPY: "Copy", EDIT: "Edit", DELETE: "Delete" } as const;
@@ -32,25 +38,30 @@ const assignElement = (method: (typeof OPTIONS)[keyof typeof OPTIONS]) => {
   return element;
 };
 
-const ShortLinkOpts = ({ url, setIsClicked }: Props) => {
+const ShortLinkOpts = ({ url, setModal, setIsClicked }: Props) => {
   const OPTION_ELEMENTS = Object.values(OPTIONS).map((opt) => {
     return { method: opt, icon: assignElement(opt) };
   });
 
   const element = useClickOutside(() => setIsClicked(false));
 
-  const handleClickedMethod = async (e: React.MouseEvent) => {
+  const handleClickedMethod = (e: React.MouseEvent) => {
     const method = e.currentTarget
       .ariaLabel as (typeof OPTIONS)[keyof typeof OPTIONS];
 
+    console.log(method);
+
     switch (method) {
       case "Copy":
-        await copyShortLink(url.short);
+        copyShortLink(url.short);
         break;
 
       case "Edit":
-        editShortLink();
-        break;
+        return setModal({
+          form: "Edit",
+          isOpen: true,
+          url,
+        });
 
       case "Delete":
         deleteShortLink();
