@@ -18,15 +18,16 @@ Link shortener and "socials" page service built using Vite + Express.js.
     - User clicks on link
         - [x] GET request to the API with the specified short URL
         - [x] API endpoint sends a 302 redirect to the user where they get redirected to the original URL
-    - [ ] Copy to clipboard option (done via a "..." menu icon beside each link, which opens up a menu)
+    - [x] Copy to clipboard option (done via a "..." menu icon beside each link, which opens up a menu)
 
 ## 3. Links CRUD operations
 
     Updating and deleting will be done via a "..." menu icon beside each link, which opens a menu
         - [x] Create links
         - [x] Read links
-        - [ ] Update links (name and original URL)
+        - [x] Update links (name and original URL)
         - [ ] Delete links
+        - [ ] Revalidate page upon doing the above
 
 # II. User Profiles
 
@@ -38,6 +39,7 @@ Link shortener and "socials" page service built using Vite + Express.js.
         - [ ] Email verification
     - [x] HTTP-Only cookie based sessions
     - [x] Protected routes
+    - [ ] Sign up flow cuts off - should either send email verification as per `II.1-Sign up`, immediately log in (not as good due to security), display a "Success...message"
 
 ## 2. Profile management - CRUD
 

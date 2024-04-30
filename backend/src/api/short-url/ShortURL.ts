@@ -30,12 +30,67 @@ const URLPayloadSchema = z.object({
   ownerId: z.string().min(1),
 });
 type URLPayload = z.infer<typeof URLPayloadSchema>;
+type ShortURLSchema = z.infer<typeof ShortURLSchema>;
 
 export default class ShortURL {
   constructor(
     private readonly config: Config = new Config(),
     private readonly idManager: ID = new ID()
   ) {}
+
+  async updateOne(payload: {
+    url: string;
+    id: string;
+  }): Promise<ShortURLSchema>;
+  async updateOne(payload: {
+    name: string;
+    id: string;
+  }): Promise<ShortURLSchema>;
+  async updateOne(payload: {
+    name: string;
+    url: string;
+    id: string;
+  }): Promise<ShortURLSchema>;
+  async updateOne(
+    payload:
+      | { name: string; id: string }
+      | { url: string; id: string }
+      | { name: string; url: string; id: string }
+  ) {
+    let url;
+
+    if ("name" in payload && "url" in payload) {
+      url = await db
+        .update(urls)
+        .set({
+          name: payload.name,
+          url: payload.url,
+          updatedAt: new Date(),
+        })
+        .where(eq(urls.id, payload.id))
+        .returning();
+    } else if ("name" in payload) {
+      url = await db
+        .update(urls)
+        .set({
+          name: payload.name,
+          updatedAt: new Date(),
+        })
+        .where(eq(urls.id, payload.id))
+        .returning();
+    } else if ("url" in payload) {
+      url = await db
+        .update(urls)
+        .set({
+          id: payload.id,
+          updatedAt: new Date(),
+        })
+        .where(eq(urls.id, payload.id))
+        .returning();
+    }
+
+    return url![0];
+  }
 
   async insertOne(payload: URLPayload) {
     // TODO Format the original URL

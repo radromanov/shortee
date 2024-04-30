@@ -10,11 +10,21 @@ export default class ShortURLController {
     private readonly service: ShortURLService = new ShortURLService()
   ) {}
 
+  async handleUpdateOne(req: Request, res: Response) {
+    const payload = req.body;
+
+    const url = await this.service.updateOne(payload);
+
+    if (!url) {
+      throw new Exception("URL doesn't exist", "Not Found");
+    }
+
+    res.status(200).send(url);
+  }
+
   async handleGetAll(req: Request, res: Response) {
     //@ts-ignore
     const urls = await this.service.getAll(req.session.user.id);
-
-    console.log(urls);
 
     res.status(200).send(urls);
   }
@@ -24,7 +34,7 @@ export default class ShortURLController {
 
     const response = await fetch(payload.url);
     if (!response.ok) {
-      throw new Exception("URL doesn't exist.", "Bad Request");
+      throw new Exception("URL doesn't exist.", "Not Found");
     }
 
     const userLinks = await db.query.users.findFirst({
@@ -39,8 +49,6 @@ export default class ShortURLController {
       // @ts-ignore
       where: eq(users.id, req.session.user.id),
     });
-
-    console.log(userLinks);
 
     if (userLinks && userLinks.urls.length >= 10) {
       throw new Exception("You can only have up to 10 URLS.", "Bad Request");

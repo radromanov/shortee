@@ -21,7 +21,9 @@ export const usersRelations = relations(users, ({ many }) => ({
 // URLs
 export const urls = pgTable("urls", {
   id: varchar("id").primaryKey(),
-  ownerId: varchar("owner_id", { length: 16 }).references(() => users.id),
+  ownerId: varchar("owner_id", { length: 16 })
+    .notNull()
+    .references(() => users.id),
   name: varchar("name", { length: 256 }).notNull(),
   url: varchar("url").notNull(),
   short: varchar("short").notNull(),

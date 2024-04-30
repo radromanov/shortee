@@ -34,6 +34,13 @@ export default class ShortURLModule {
         asyncErrorHandler(
           async (req, res) => await this.controller.handleGetAll(req, res)
         )
+      )
+      .put(
+        "/",
+        asyncErrorHandler(isAuthed),
+        asyncErrorHandler(
+          async (req, res) => await this.controller.handleUpdateOne(req, res)
+        )
       );
 
     this.router.get(
