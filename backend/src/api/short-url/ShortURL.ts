@@ -135,9 +135,11 @@ export default class ShortURL {
   async deleteOne(id: string) {
     await db
       .update(ids)
-      .set({ taken: false, updatedAt: new Date(new Date().toLocaleString()) })
+      .set({ taken: false, updatedAt: new Date(new Date()) })
       .where(eq(ids.id, id));
-    return await db.delete(urls).where(eq(urls.id, id));
+    const [url] = await db.delete(urls).where(eq(urls.id, id)).returning();
+
+    return url!;
   }
 
   async isExists(id: string) {

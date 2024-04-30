@@ -10,6 +10,18 @@ export default class ShortURLController {
     private readonly service: ShortURLService = new ShortURLService()
   ) {}
 
+  async handleDeleteOne(req: Request, res: Response) {
+    const { id } = req.body;
+
+    const url = await this.service.deleteOne(id);
+
+    if (!url) {
+      throw new Exception("URL doesn't exist", "Not Found");
+    }
+
+    res.sendStatus(200);
+  }
+
   async handleUpdateOne(req: Request, res: Response) {
     const payload = req.body;
 

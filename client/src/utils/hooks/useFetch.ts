@@ -145,9 +145,13 @@ export const useFetch = <C>() => {
     payload: { id: string; name: string; url: string },
     schema: z.ZodSchema<C>,
     method: HTTPMethod = "PUT"
-  ) => {
-    fetchData({ url, method, payload, schema });
-  };
+  ) => fetchData({ url, method, payload, schema });
+
+  const fetchDelete = (
+    url: string,
+    payload: { id: string },
+    method: HTTPMethod = "DELETE"
+  ) => fetchData({ url, method, payload });
 
   return {
     fetchLogin,
@@ -156,6 +160,7 @@ export const useFetch = <C>() => {
     fetchSession,
     fetchGet,
     fetchPut,
+    fetchDelete,
     data,
   };
 };

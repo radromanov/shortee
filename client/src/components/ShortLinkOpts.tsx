@@ -3,8 +3,8 @@ import { FiEdit3 } from "react-icons/fi";
 import { RiDeleteBinLine } from "react-icons/ri";
 import { useClickOutside } from "../utils/hooks/useClickOutside";
 import copyShortLink from "../utils/helpers/copyShortLink";
-import deleteShortLink from "../utils/helpers/deleteShortLink";
 import { ShortURL } from "../utils/types/Url.type";
+import { useFetch } from "../utils/hooks/useFetch";
 
 interface Props {
   url: ShortURL;
@@ -44,6 +44,7 @@ const ShortLinkOpts = ({ url, setModal, setIsClicked }: Props) => {
   });
 
   const element = useClickOutside(() => setIsClicked(false));
+  const { fetchDelete } = useFetch();
 
   const handleClickedMethod = (e: React.MouseEvent) => {
     const method = e.currentTarget
@@ -57,6 +58,7 @@ const ShortLinkOpts = ({ url, setModal, setIsClicked }: Props) => {
         break;
 
       case "Edit":
+        setIsClicked(false);
         return setModal({
           form: "Edit",
           isOpen: true,
@@ -64,8 +66,12 @@ const ShortLinkOpts = ({ url, setModal, setIsClicked }: Props) => {
         });
 
       case "Delete":
-        deleteShortLink();
-        break;
+        setIsClicked(false);
+        return fetchDelete(
+          "http://localhost:3001/api/v1/short-url",
+          { id: url.id },
+          "DELETE"
+        );
     }
 
     setIsClicked(false);

@@ -10,23 +10,17 @@ export default class ShortURLService {
       return null;
     }
 
-    console.log("Found URL, checking diffs...");
-
     if (shortUrl.name === payload.name && shortUrl.url === payload.url) {
-      console.log("No diffs found, quitting operation...");
       return null;
     }
 
     let url;
 
     if (shortUrl.name !== payload.name && shortUrl.url !== payload.url) {
-      console.log("Name & URL different, updating both...");
       url = await this.shortUrl.updateOne(payload);
     } else if (shortUrl.url !== payload.url) {
-      console.log("URL different, updating one...");
       url = await this.shortUrl.updateOne({ url: payload.url, id: payload.id });
     } else if (shortUrl.name !== payload.name) {
-      console.log("Name different, updating one...");
       url = await this.shortUrl.updateOne({
         name: payload.name,
         id: payload.id,
@@ -34,6 +28,16 @@ export default class ShortURLService {
     }
 
     return url!;
+  }
+
+  async deleteOne(id: string) {
+    const [shortUrl] = await this.shortUrl.getOne(id);
+
+    if (!shortUrl) {
+      return null;
+    }
+
+    return await this.shortUrl.deleteOne(id);
   }
 
   async getAll(ownerId: string) {
