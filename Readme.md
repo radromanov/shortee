@@ -26,7 +26,7 @@ Link shortener and "socials" page service built using Vite + Express.js.
         - [x] Create links
         - [x] Read links
         - [x] Update links (name and original URL)
-        - [ ] Delete links
+        - [x] Delete links
         - [ ] Revalidate page upon doing the above
 
 # II. User Profiles
@@ -39,7 +39,7 @@ Link shortener and "socials" page service built using Vite + Express.js.
         - [ ] Email verification
     - [x] HTTP-Only cookie based sessions
     - [x] Protected routes
-    - [ ] Sign up flow cuts off - should either send email verification as per `II.1-Sign up`, immediately log in (not as good due to security), display a "Success...message"
+    - [ ] Sign up flow cuts off - should either send email verification as per `II.1, Sign up`, immediately log in (not as good due to security), display a "Success...message"
 
 ## 2. Profile management - CRUD
 
